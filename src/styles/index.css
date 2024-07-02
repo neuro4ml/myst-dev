@@ -1,0 +1,140 @@
+@import url('app.css');
+@import url('~katex/dist/katex.css');
+
+
+.App {
+  text-align: center;
+}
+.app-title{
+  color:orange;
+  text-align: center;
+  margin-top: -6px;
+}
+
+.node-list-class {list-style-type: none;}
+
+.hello-world-class {
+  background-color: orange;
+  color: red;
+  font-style: italic;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: 36px;
+  border: solid;
+  border-width: 2px;
+}
+
+.textarea-class {
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 10px;
+  padding-left: 10px;
+  margin-left: 10%;
+  width:80%;
+  height: auto;
+  min-height: 250px;
+  }
+
+
+.markdown-preview-class {
+  border-width: 2px;
+  border-radius: 10px;
+  border-style: solid;
+  margin-left: 10%;
+  padding-left: 10px;
+  width:80%;
+  height: auto;
+  min-height: 250px;
+}
+
+.text-instruction-class {
+  margin-left: 10%;
+  font-size: 16px;
+}
+
+.PR-component-container {
+    display: grid;
+    grid-template-columns: repeat(1fr, 1fr, 1fr);
+    grid-template-rows: repeat(1fr, 1fr);
+    /*grid-row-gap: 600px;
+    grid-column-gap: 50px;
+    text-align: center;*/
+}
+
+.PR-component-summary {
+  color: rgb(56, 87, 226);
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.PR-component-grid{
+  display:flex; 
+  flex-direction:row;
+  margin-top: 10px;
+}
+
+.PR-component-left-column {
+  width: 250px;
+}
+
+.PR-component-right-column {
+  width: 500px;
+  text-align: center;
+}
+
+.PR-description {
+  text-align: justify;
+  color: grey
+}
+
+.PR-summary {
+  color: rgb(56, 87, 226);
+  font-weight: bold;
+  text-align: justify;
+}
+
+.PR-link {
+  color: rgb(56, 87, 226);
+  
+}
+
+.PR-link:hover {
+  font-weight: underline;
+  
+}
+
+.horizontal-columns {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  gap: 20px; /* Add some gap between columns if needed */
+}
+
+.column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.markdown-column {
+  flex: 1;
+  padding: 20px; /* Add some padding for better appearance */
+}
+
+.nav-bar {
+  border-bottom-width: 1px;
+  border-bottom-color: black;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
