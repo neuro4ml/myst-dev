@@ -1,0 +1,90 @@
+/* Adjust width and position of sidebar and content */
+.sphinxsidebar {
+  float: left;
+  width: 15%; /* Adjust width as needed */
+}
+
+.bodycontent {
+  float: left;
+  width: 70%; /* Adjust width as needed */
+  margin-left: 5%; /* Adjust margin for spacing between columns */
+}
+
+#viewport {
+  grid-column: 3;
+  overflow-y: auto;
+  padding: 20px;
+  background-color: #f4f4f4;
+  border-left: 1px solid #ddd;
+}
+
+#viewport h2 {
+  margin-top: 0;
+  font-size: 1.5em;
+}
+
+.highlight {
+  background-color: yellow;
+  padding: 5px; /* Adjust spacing as needed */
+  margin-bottom: 10px; /* Adjust spacing as needed */
+  display: block; /* Ensures each element is on a new line */
+}
+
+body {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background-color: #f9f9f9;
+}
+
+#content {
+  grid-column: 2;
+  overflow-y: auto;
+  padding: 20px;
+  background-color: white;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+}
+
+#content h1, #content h2, #content h3 {
+  margin-top: 0;
+}
+
+#toc {
+  grid-column: 1;
+  overflow-y: auto;
+  padding: 20px;
+  background-color: #2e3b4e;
+  color: white;
+}
+
+#toc h2 {
+  margin-top: 0;
+  font-size: 1.5em;
+}
+
+#toc ul {
+  list-style: none;
+  padding: 0;
+}
+
+#toc li {
+  margin-bottom: 10px;
+}
+
+#toc a {
+  color: white;
+  text-decoration: none;
+}
+
+#toc a:hover {
+  text-decoration: underline;
+}
+
+/*# sourceMappingURL=index.css.map */

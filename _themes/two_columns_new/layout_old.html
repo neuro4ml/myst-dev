@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="{{ language | default('en') }}">
+<head>
+    <meta charset="utf-8">
+    <title>{{ title }}</title>
+    {{ metatags }}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {%- for css_file in css_files %}
+    <link rel="stylesheet" href="{{ pathto(css_file, 1) }}">
+    {%- endfor %}
+    <style>
+        /* CSS content as provided above */
+        body {
+            display: grid;
+            grid-template-columns: 1fr 3fr 1fr;
+            gap: 20px;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+
+        #toc {
+            grid-column: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: #2e3b4e;
+            color: white;
+        }
+
+        #toc h2 {
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+
+        #toc ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        #toc li {
+            margin-bottom: 10px;
+        }
+
+        #toc a {
+            color: white;
+            text-decoration: none;
+        }
+
+        #toc a:hover {
+            text-decoration: underline;
+        }
+
+        #content {
+            grid-column: 2;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: white;
+            border-left: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+        }
+
+        #content h1, #content h2, #content h3 {
+            margin-top: 0;
+        }
+
+        #viewport {
+            grid-column: 3;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-left: 1px solid #ddd;
+        }
+
+        #viewport h2 {
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+
+        #links-references div {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav id="toc">
+        {%- set toctree = toctree(maxdepth=2, collapse=True, includehidden=True) %}
+        {{ toctree }}
+    </nav>
+    <main id="content">
+        {{ body }}
+    </main>
+    <aside id="viewport">
+        <h2>Currently Visible Links and References</h2>
+        <div id="links-references">
+            <!-- Links and references will be dynamically inserted here -->
+        </div>
+    </aside>
+    {%- for script_file in script_files %}
+    <script src="{{ pathto(script_file, 1) }}"></script>
+    {%- endfor %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const content = document.getElementById('content');
+            const viewport = document.getElementById('links-references');
+
+            function updateViewport() {
+                const links = content.querySelectorAll('a[href^="#"]');
+                viewport.innerHTML = '';
+                links.forEach(link => {
+                    const reference = document.createElement('div');
+                    reference.textContent = link.textContent;
+                    viewport.appendChild(reference);
+                });
+            }
+
+            updateViewport();
+            window.addEventListener('scroll', updateViewport);
+        });
+    </script>
+</body>
+</html>

@@ -1,1 +1,3 @@
-node_modules
+_themes/sphinx_book_theme
+_themes/two_columns
+_themes/two_columns_new/sass

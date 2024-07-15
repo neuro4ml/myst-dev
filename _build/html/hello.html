@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>MyST Markdown Test File</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="_static/pygments.css">
+    <link rel="stylesheet" href="_static/css/custom.css">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <nav id="toc">
+        <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">MyST Markdown Test File</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#basic-markdown-features">Basic Markdown Features</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="1_Neuron_Structure.html">Neuron Structure</a></li>
+</ul>
+
+    </nav>
+    <main id="content">
+        <section class="tex2jax_ignore mathjax_ignore" id="myst-markdown-test-file">
+<h1><a class="toc-backref" href="#id1" role="doc-backlink">MyST Markdown Test File</a><a class="headerlink" href="#myst-markdown-test-file" title="Link to this heading">¶</a></h1>
+<p>This is a test file to demonstrate various features of MyST Markdown.</p>
+<section id="basic-markdown-features">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Basic Markdown Features</a><a class="headerlink" href="#basic-markdown-features" title="Link to this heading">¶</a></h2>
+<section id="text-formatting">
+<h3><a class="toc-backref" href="#id3" role="doc-backlink">Text Formatting</a><a class="headerlink" href="#text-formatting" title="Link to this heading">¶</a></h3>
+<p>This text is <strong>bold</strong>, this is <em>italic</em>, and this is <em><strong>bold and italic</strong></em>.</p>
+</section>
+<section id="lists">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink">Lists</a><a class="headerlink" href="#lists" title="Link to this heading">¶</a></h3>
+<p>Unordered list:</p>
+<ul class="simple">
+<li><p>Item 1</p></li>
+<li><p>Item 2</p>
+<ul>
+<li><p>Subitem 2.1</p></li>
+<li><p>Subitem 2.2</p></li>
+</ul>
+</li>
+<li><p>Item 3</p></li>
+</ul>
+<p>Ordered list:</p>
+<ol class="arabic simple">
+<li><p>First item</p></li>
+<li><p>Second item</p></li>
+<li><p>Third item</p></li>
+</ol>
+</section>
+<section id="links-and-images">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Links and Images</a><a class="headerlink" href="#links-and-images" title="Link to this heading">¶</a></h3>
+<p><a class="reference external" href="https://www.openai.com">Link to OpenAI</a></p>
+<p><img alt="Alt text for image" src="https://example.com/image.jpg" /></p>
+</section>
+<section id="code-blocks">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Code Blocks</a><a class="headerlink" href="#code-blocks" title="Link to this heading">¶</a></h3>
+<p>Inline code: <code class="docutils literal notranslate"><span class="pre">print(&quot;Hello,</span> <span class="pre">World!&quot;)</span></code></p>
+<div class="dropdown admonition note">
+<p class="admonition-title">Note</p>
+<p>Click Me! 👈
+👋 This could be a solution to a problem or contain other detailed explanations.</p>
+</div>
+<nav class="contents" id="table-of-contents">
+<p class="topic-title">Table of Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#myst-markdown-test-file" id="id1">MyST Markdown Test File</a></p>
+<ul>
+<li><p><a class="reference internal" href="#basic-markdown-features" id="id2">Basic Markdown Features</a></p>
+<ul>
+<li><p><a class="reference internal" href="#text-formatting" id="id3">Text Formatting</a></p></li>
+<li><p><a class="reference internal" href="#lists" id="id4">Lists</a></p></li>
+<li><p><a class="reference internal" href="#links-and-images" id="id5">Links and Images</a></p></li>
+<li><p><a class="reference internal" href="#code-blocks" id="id6">Code Blocks</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</section>
+</section>
+</section>
+
+    </main>
+    <aside id="viewport">
+        <h2>Highlighted Elements</h2>
+        <div id="links-references">
+            <!-- Highlighted elements will be dynamically inserted here -->
+        </div>
+    </aside>
+    <script src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const content = document.getElementById('content');
+            const viewport = document.getElementById('links-references');
+
+            // Highlight all 'a' elements with class 'reference external'
+            content.querySelectorAll('a.reference.external').forEach(el => {
+                el.classList.add('highlight');
+            });
+
+            // Highlight all 'span' elements with class 'xref myst'
+            content.querySelectorAll('span.xref.myst').forEach(el => {
+                el.classList.add('highlight');
+            });
+
+            // Highlight all 'figure' elements
+            content.querySelectorAll('figure').forEach(el => {
+                el.classList.add('highlight');
+            });
+
+            // Move highlighted elements to the right-hand column with spacing
+            function moveHighlightedElements() {
+                const highlightedElements = content.querySelectorAll('.highlight');
+                viewport.innerHTML = ''; // Clear previous content
+
+                highlightedElements.forEach((el, index) => {
+                    const clone = el.cloneNode(true);
+                    if (index > 0) {
+                        viewport.appendChild(document.createElement('br')); // Add spacing between elements
+                    }
+                    viewport.appendChild(clone);
+                });
+            }
+
+            // Initial move of highlighted elements
+            moveHighlightedElements();
+
+            // Listen for scroll events to update highlighted elements
+            window.addEventListener('scroll', moveHighlightedElements);
+        });
+    </script>
+</body>
+</html>
