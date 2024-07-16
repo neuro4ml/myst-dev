@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Biophysical Neuron Models</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../_static/pygments.css">
+    <link rel="stylesheet" href="../_static/css/custom.css">
+    <link rel="stylesheet" href="../_static/css/index.css">
+</head>
+<body>
+    <nav id="toc">
+        <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../hello.html">MyST Markdown Test File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1_Neuron_Structure.html">Neuron Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2_Neuron_Function.html">Neuron Function</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3_Abstract_Models.html">Abstract Neuron Models</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Biophysical Neuron Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hodgkin-huxely-type-neuron">Hodgkin-Huxely Type Neuron</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spatial-multicompartamental-neuron">Spatial / Multicompartamental Neuron</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dendrify">Dendrify</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="6_w1-exercises.html">Exercises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="7_W1-reading.html">Reading Material</a></li>
+</ul>
+
+    </nav>
+    <main id="content">
+        <section class="tex2jax_ignore mathjax_ignore" id="biophysical-neuron-models">
+<h1>Biophysical Neuron Models<a class="headerlink" href="#biophysical-neuron-models" title="Link to this heading">¶</a></h1>
+<p><a class="reference download internal" download="" href="../_downloads/e4d9eed41f44a336525ea6b6dc6a26f1/W1-V3-biophysical-models.pptx"><span class="xref download myst">Downlod the slides here</span></a></p>
+<hr class="docutils" />
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<p>This section is going to be much shorter than the last one. We don’t want to go deep into models that are more biophysically realistic, but we do want to mention them.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Note!
+In this section, we’ll focus on models with more biological detail than before</p>
+</div>
+<p><a class="reference internal" href="#hodkin-huxley-label"><code class="xref myst docutils literal notranslate"><span class="pre">hodkin-huxley-label</span></code></a></p>
+</section>
+<section id="hodgkin-huxely-type-neuron">
+<h2>Hodgkin-Huxely Type Neuron<a class="headerlink" href="#hodgkin-huxely-type-neuron" title="Link to this heading">¶</a></h2>
+<p>We’ll start with the famous Hodgkin-Huxley neuron. You can see an action potential plotted with this model <a class="reference internal" href="#hux"><span class="xref myst">here</span></a>.</p>
+<figure class="align-center" id="id1">
+<img alt="Hodgkin-Huxely Action Potential Plot" src="../_images/hodgkinhuxely.png" />
+<figcaption>
+<p><span class="caption-text">Hodgkin-Huxely Action Potential Plot</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p><a class="reference internal" href="#equation-model">(1)</a> are derived by treating the cell membrane as an electrical circuit consisting of a capacitor and a number of voltage-dependent resistors corresponding to the different ion channels. Each type of ion channel <span class="math notranslate nohighlight">\(k\)</span> has an associated current <span class="math notranslate nohighlight">\(I_k (t)\)</span> with its own dynamics, and there are many different types.</p>
+<p>Actually, there are thousands of papers on different types of ion channels and their associated dynamics.</p>
+<div class="math notranslate nohighlight" id="equation-model">
+<span class="eqno">(1)<a class="headerlink" href="#equation-model" title="Link to this equation">¶</a></span>\[C \frac{dv}{dt} = \Sigma_k I_k (t) + I(t)\]</div>
+<p>Where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(v\)</span> is the membrane potential</p></li>
+<li><p><span class="math notranslate nohighlight">\(C\)</span> is the membrane capactiy</p></li>
+<li><p><span class="math notranslate nohighlight">\(I(t)\)</span> is the applied current</p></li>
+</ul>
+<p>In the <a class="reference external" href="https://doi.org/10.1113/jphysiol.1952.sp004764">original paper</a> by Hodgkin and Huxley they considered just three channels corresponding to sodium (Na), potassium (K) and a leak (L).</p>
+<p>By hand – quite literally as they used a hand cranked mechanical calculator to solve the equations over several weeks – they found a series of functions that approximated these dynamics quite well.</p>
+<div class="math notranslate nohighlight" id="equation-model2">
+<span class="eqno">(2)<a class="headerlink" href="#equation-model2" title="Link to this equation">¶</a></span>\[\Sigma_k I_k (t) = g_{Na}m^{3}h(v-E_{Na}) + g_{K}n^{4}(v-E_{K})+g_{L}(v-E_{L})\]</div>
+<p>Their <a class="reference internal" href="#equation-model2">(2)</a> fitted <span class="math notranslate nohighlight">\(m\)</span>, <span class="math notranslate nohighlight">\(n\)</span> and <span class="math notranslate nohighlight">\(h\)</span> into equations like <a class="reference internal" href="#equation-equation">(3)</a>.</p>
+<div class="math notranslate nohighlight" id="equation-equation">
+<span class="eqno">(3)<a class="headerlink" href="#equation-equation" title="Link to this equation">¶</a></span>\[\frac{dm}{dt} = a_{m}(v)(1-m) - \beta(v)m\]</div>
+<p>With the functions defined like <a class="reference internal" href="#equation-function">(4)</a>:</p>
+<div class="math notranslate nohighlight" id="equation-function">
+<span class="eqno">(4)<a class="headerlink" href="#equation-function" title="Link to this equation">¶</a></span>\[a_{m}(v) = \frac{(a_{m}v + b_{m})}{1 - e^{c_{m}v+d_{m}}}\]</div>
+<p>Ultimately, this comes down to a nonlinear differential equation with four dynamic variables and a lot of choices of functions and constants to fit to data.</p>
+<p>It’s also a bit of a nasty one to simulate, either requiring very small time steps or a specific numerical integration method.</p>
+<div class="dropdown admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For more
+This has just been a very quick glimpse at this type of model.
+We’ve provided an example of the code to simulate these in the notebook accompanying this section, and we’ve given a link to <a class="reference external" href="https://doi.org/10.1113/jphysiol.1952.sp004764">further reading</a> if you’re interested in knowing more.</p>
+</div>
+</section>
+<section id="spatial-multicompartamental-neuron">
+<h2>Spatial / Multicompartamental Neuron<a class="headerlink" href="#spatial-multicompartamental-neuron" title="Link to this heading">¶</a></h2>
+<p>One thing we’ve totally ignored so far in all the models we’ve talked about is that neurons have a very complex spatial structure, with dendrites and axons and – as you can see in the <a class="reference internal" href="#gif"><span class="xref myst">picture</span></a> – activity that travels around the cell.</p>
+<figure class="align-center" id="id2">
+<img alt="Neuron Gif" src="../_images/neurongif.gif" />
+<figcaption>
+<p><span class="caption-text">Neuron Activity</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>We can capture this by thinking of the dendrites and axons as <a class="reference internal" href="#cyl"><span class="xref myst">cylinder</span></a>, then break these cylinders into a number of short cylindrical segments that are relatively uniform. We then think of each as being nodes in an electrical circuit as we did with the Hodgkin-Huxley neuron.</p>
+<figure class="align-center" id="id3">
+<img alt="Cylinder Modeling of Dendrites and Axons" src="../_images/cylinders.png" />
+<figcaption>
+<p><span class="caption-text">Cylinder Modeling of Dendrites and Axons</span><a class="headerlink" href="#id3" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>If we take this approach and follow the mathematical analysis through, we get the <a class="reference internal" href="#equation-cable">(5)</a>, a second order partial differential equation.
+This can be simulated by breaking the cable into compartments as above, but as you can imagine it gets quite heavy quite quickly, as real neurons can have thousands of these compartments that need to be simulated.</p>
+<div class="math notranslate nohighlight" id="equation-cable">
+<span class="eqno">(5)<a class="headerlink" href="#equation-cable" title="Link to this equation">¶</a></span>\[\frac{\delta^2}{\delta x^2}v(t,x) = cr_{L} * \frac{\delta}{\delta x}v(t,x) + r_{L} * \sum_k i_{k} (t,x) - r_{L}i(t,x)\]</div>
+<p>Where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(t\)</span> is time</p></li>
+<li><p><span class="math notranslate nohighlight">\(x\)</span> is the distance along the cable</p></li>
+<li><p><span class="math notranslate nohighlight">\(i_k\)</span> is ionic current per unit length</p></li>
+<li><p><span class="math notranslate nohighlight">\(i_{ext}\)</span> is externally applied current per unit length</p></li>
+<li><p><span class="math notranslate nohighlight">\(r_L\)</span> is longitudinal resistance per unit length</p></li>
+<li><p><span class="math notranslate nohighlight">\(c\)</span> is capacity per unit length</p></li>
+</ul>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Linker
+So, does any of this matter in terms of how the network as a whole functions or is this just implementation details?</p>
+<p>We don’t know, but it has been argued that it may be important and it’s an active area of research, for example see <a class="reference external" href="https://doi.org/10.48550/arXiv.2306.08007">this recent paper</a>.</p>
+<p>The problem is that it’s <strong>too computationally demanding</strong> to be used in a machine learning setup, or indeed in a large network without huge computational resources.</p>
+</div>
+</section>
+<section id="dendrify">
+<h2>Dendrify<a class="headerlink" href="#dendrify" title="Link to this heading">¶</a></h2>
+<p>That’s where <a class="reference external" href="https://dendrify.readthedocs.io/en/latest/">Dendrify</a> comes in. It’s a relatively new software package to automatically simplify these very complex models into something that can be easily simulated while still capturing a lot of the relevant dynamics, like <a class="reference internal" href="#dendrifyslide"><span class="xref myst">these examples here</span></a>. If you’re interested in exploring what dendritic structure could add to network level computations, this package is probably worth a look.</p>
+<figure class="align-center" id="id4">
+<img alt="Dendrify Models" src="../_images/dendrify.png" />
+<figcaption>
+<p><span class="caption-text">Dendrify Models</span><a class="headerlink" href="#id4" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>That’s it!
+That’s the end of the sections on modelling neurons. The next section will be an introduction to this week’s coding exercise, and then next week we’ll move on to synapses and networks.</p>
+</div>
+</section>
+</section>
+
+    </main>
+    <aside id="viewport">
+        <h2>Highlighted Elements</h2>
+        <div id="links-references">
+            <!-- Highlighted elements will be dynamically inserted here -->
+        </div>
+    </aside>
+    <script src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/highlight.js"></script>
+    <script src="../"></script>
+    <script src="../https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+</html>

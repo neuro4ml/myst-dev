@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Synapses 2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../_static/pygments.css">
+    <link rel="stylesheet" href="../_static/css/custom.css">
+    <link rel="stylesheet" href="../_static/css/index.css">
+</head>
+<body>
+    <nav id="toc">
+        <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../hello.html">MyST Markdown Test File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../1_Neuron_Structure.html">Neuron Structure</a></li>
+</ul>
+
+    </nav>
+    <main id="content">
+        <section class="tex2jax_ignore mathjax_ignore" id="synapses-2">
+<h1>Synapses 2<a class="headerlink" href="#synapses-2" title="Link to this heading">¶</a></h1>
+<p><a class="reference download internal" download="" href="../_downloads/ee38d55916c4ba37f68d72b13cc6b912/W2-V1-synapses-2.pptx"><span class="xref download myst">Downlod the slides here</span></a></p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<p>In the last section, we covered synapses, neurotransmitters, and receptors. In this section, we’re going to cover how synapses can adjust their strength and weight.
+In general, we train artificial neural networks by adjusting their connection weights according to a learning rule, but what is the equivalent in biology?</p>
+</section>
+<section id="hebian-learning">
+<h2>Hebian Learning<a class="headerlink" href="#hebian-learning" title="Link to this heading">¶</a></h2>
+<p>Well as early as 1949 Donald Hebb proposed a relevantly simple learning rule:</p>
+<p><i>“When an axon of cell A is near enough to excite a cell B and repeatedly or persistently takes part in firing it, some growth process or metabolic change takes place in one or both cells such that A’s efficiency, as one of the cells firing B, is increased.” </i></p>
+<p>At the time this was just a theory, but experimental evidence confirmed it around 20 years later.
+This is often summarised as <i>Cells that fire together wire together, and conversely Cells that fire out of sync lose their link</i>.
+Though this misses the fact that cell A must spike first to contribute to B’s firing, therefore the relative timing matters.</p>
+</section>
+<section id="spike-timing-dependent-plasticity">
+<h2>Spike-timing-dependent Plasticity<a class="headerlink" href="#spike-timing-dependent-plasticity" title="Link to this heading">¶</a></h2>
+<p>Let’s consider a pair of neurons. In the figure below, panel A illustrates that if the pre-synaptic neuron’s spike occurs before or after the post-synaptic neuron, their relationship is  causal or acausal. Panel B shows how this synapse’s strength (on the y-axis) will be adjusted depending on the difference in spike timing between the two neurons. If the relationship is casual, so ‘pre’ precedes ‘post’ the strength will be increased or potentiated (shown in green). While if it is acausal, so ‘pre’ tends to follow ‘post’, then the strength will be decreased (shown in red).</p>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="../_images/Synapses2Picture1.jpg"><img alt="../_images/Synapses2Picture1.jpg" src="../_images/Synapses2Picture1.jpg" style="width: 330px;" /></a>
+<figcaption>
+<p><span class="caption-text">Paper: <a class="reference external" href="https://doi.org/10.3389/fnsyn.2011.00004">https://doi.org/10.3389/fnsyn.2011.00004</a></span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>This is known as spike-timing-dependent plasticity, and it tends to induce long-term changes in synaptic strength via processes known as long-term potentiation (LTP) and long term depression (LTD).</p>
+<p>So, what changes at the synapse to cause this change in weight?</p>
+</section>
+<section id="altering-synapses">
+<h2>Altering Synapses<a class="headerlink" href="#altering-synapses" title="Link to this heading">¶</a></h2>
+<p>If we think about the structure of the synapse, then we can see that there are many possibilities for changing the connection strength such as:</p>
+<ul class="simple">
+<li><p>Increasing the number of synaptic vesicles or density of neurotransmitters</p></li>
+<li><p>Increasing the number of post-synaptic receptors</p></li>
+<li><p>Increasing the surface or even adding an additional synapse between the two neurons.</p></li>
+</ul>
+<p>But these are long-term changes, and synaptic weights can also change on much quicker timescales, on the order of hundreds to thousands of milliseconds. This is known as short-term plasticity.</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/Picture3.png"><img alt="../_images/Picture3.png" src="../_images/Picture3.png" style="width: 500px;" /></a>
+</figure>
+</section>
+<section id="short-term-plasticity">
+<h2>Short-term Plasticity<a class="headerlink" href="#short-term-plasticity" title="Link to this heading">¶</a></h2>
+<p>Short-term plasticity describes how synaptic strength dynamically changes with the level of presynaptic activity. Broadly, short-term facilitation is caused by the higher levels of calcium at the axon terminal after spiking, which increase the probability of neurotransmitter release. 
+Short-term depression is caused by the lower levels of neurotransmitters available at the synapse, and in an extreme case, it’s possible that the synapse will fail to send a signal at all.</p>
+<p>Hence, short-term plasticity shows how a neuron’s recent activity and the state of it’s synapses influence it’s weight dynamically. The fact that synapses will sometimes fail to send a signal may remind you of drop-out in machine learning, though in this case, individual connections are failing, not the entire unit. Yann Le Cun and colleagues. explore this difference in a paper which you can read <a class="reference external" href="http://www.scholarpedia.org/article/Short-term_synaptic_plasticity">here</a>.</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/Synapses2Picture2.png"><img alt="../_images/Synapses2Picture2.png" src="../_images/Synapses2Picture2.png" style="width: 500px;" /></a>
+</figure>
+</section>
+<section id="dropconnect">
+<h2>DropConnect<a class="headerlink" href="#dropconnect" title="Link to this heading">¶</a></h2>
+<p>Just to be explicit:</p>
+<ul class="simple">
+<li><p>Dropout - randomly silence <strong>units</strong> during training, which reduces over-fitting.</p></li>
+<li><p>DropConnect - randomly silence <strong>weigths</strong></p></li>
+</ul>
+<p>Just to give you a quick comparison between the two, the graph below shows the text error on MNIST as a function of the network size, with the following plots:</p>
+<ul class="simple">
+<li><p>No-Drop in black - the error increases with size as the network increasingly overfit</p></li>
+<li><p>Dropout in red - the error decreases with size</p></li>
+<li><p>DropConnect in blue - the error is lower and more stable.</p></li>
+</ul>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/Synapses2Picture3.png"><img alt="../_images/Synapses2Picture3.png" src="../_images/Synapses2Picture3.png" style="width: 500px;" /></a>
+</figure>
+<p>If you’re interested, the <a class="reference external" href="https://proceedings.mlr.press/v28/wan13.html">paper</a> provides more empirical and theoretical results which suggest that DropConnect may be advantageous.</p>
+</section>
+</section>
+
+    </main>
+    <aside id="viewport">
+        <h2>Highlighted Elements</h2>
+        <div id="links-references">
+            <!-- Highlighted elements will be dynamically inserted here -->
+        </div>
+    </aside>
+    <script src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/highlight.js"></script>
+</body>
+</html>

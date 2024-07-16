@@ -10,7 +10,7 @@ BUILDDIR      = _build
 
 # Path to your SASS source and output directories
 SASS_SRC      = ./_themes/two_columns_new/sass/
-SASS_OUT      = ./_themes/two_columns_new/static/
+SASS_OUT      = ./_themes/two_columns_new/static/css/
 
 # Put it first so that "make" without argument is like "make help".
 help:

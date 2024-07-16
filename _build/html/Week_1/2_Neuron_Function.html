@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Neuron Function</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../_static/pygments.css">
+    <link rel="stylesheet" href="../_static/css/custom.css">
+    <link rel="stylesheet" href="../_static/css/index.css">
+</head>
+<body>
+    <nav id="toc">
+        <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../hello.html">MyST Markdown Test File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../1_Neuron_Structure.html">Neuron Structure</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Neuron Function</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#single-neuron-recordings">Single Neuron Recordings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#resting-membrane-potential">Resting Membrane Potential</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spikes">Spikes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#membrane-time-constant">Membrane Time Constant</a></li>
+</ul>
+</li>
+</ul>
+
+    </nav>
+    <main id="content">
+        <section class="tex2jax_ignore mathjax_ignore" id="neuron-function">
+<h1>Neuron Function<a class="headerlink" href="#neuron-function" title="Link to this heading">¶</a></h1>
+<p><a class="reference download internal" download="" href="../_downloads/d68eb18d8174508b41121449c75e10ab/W1-V1-function.pptx"><span class="xref download myst">Downlod the slides here</span></a></p>
+<hr class="docutils" />
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<p>Last week we saw that neurons act as information processing units. To do so, they use both chemical and electrical signals:</p>
+<ul class="simple">
+<li><p>Neurons receive chemical input signals, known as neurotransmitters, at their dendrites.</p></li>
+<li><p>Transform this into an electrical signal,</p></li>
+<li><p>And then output their own neurotransmitters to other neurons via their axon terminals.</p></li>
+</ul>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Note!
+<strong>We’ll cover chemical signaling next week, and focus on the electrical part today.</strong></p>
+</div>
+<figure class="align-center" id="id1">
+<img alt="Diagram of Neuron" src="../_images/neurondiagram.png" />
+<figcaption>
+<p><span class="caption-text">Diagram of Neuron</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Linker
+So let’s start by looking at the electrical activity of a single neuron.</p>
+</div>
+</section>
+<section id="single-neuron-recordings">
+<h2>Single Neuron Recordings<a class="headerlink" href="#single-neuron-recordings" title="Link to this heading">¶</a></h2>
+<p>In <a class="reference internal" href="#recordings"><span class="xref myst">Figure 2</span></a> (from <a class="reference external" href="https://doi.org/10.1152/jn.00408.2011">this paper</a>) we have time in ms on the x-axis and voltage in mV on the y-axis.</p>
+<p>Exactly how researchers acquire this sort of data depends on several factors, but in general you need an electrode, an amplifier, and a specimen to record from, like an isolated neuron in a dish or even a human brain during surgery.</p>
+<figure class="align-center" id="id2">
+<img alt="Single Neuron Recording Graph" src="../_images/singleneuronrecord.png" />
+<figcaption>
+<p><span class="caption-text">Single Neuron Recording</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>From this sort of plot, we can observe two features:</p>
+<ul class="simple">
+<li><p>First, there are these high amplitude, 1-2ms long events, which we call action potentials or spikes.</p></li>
+<li><p>Second, between the spikes, the neurons voltage fluctuates around a baseline value, which we call the resting membrane potential.</p></li>
+</ul>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Linker
+So, how do neurons generate their resting potential and spikes?</p>
+</div>
+</section>
+<section id="resting-membrane-potential">
+<h2>Resting Membrane Potential<a class="headerlink" href="#resting-membrane-potential" title="Link to this heading">¶</a></h2>
+<p>The neuron’s cell membrane plays a key role in generating resting potential and spikes. In <a class="reference internal" href="#restingpotential"><span class="xref myst">Figure 3</span></a>, the cell membrane seperates the inside of the cell from the outside.</p>
+<p>Importantly, ions (charged particles), like sodium and potassium are unevenly distributed across the membrane. For example:</p>
+<ul class="simple">
+<li><p>K+ is at higher concentrations inside</p></li>
+<li><p>Na+ and chloride are at higher concentrations</p></li>
+</ul>
+<p>This means that there are both chemical and electrical gradients across the membrane.</p>
+<figure class="align-center" id="id3">
+<img alt="Resting Membrane Potential" src="../_images/restingmembrane.png" />
+<figcaption>
+<p><span class="caption-text">Diagram Showing the Resting Membrane Potential and Ionic Movements</span><a class="headerlink" href="#id3" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>However, these charged ions can’t cross membrane directly, and instead must use specialized channels – which are proteins embedded in the membrane.</p>
+<ul class="simple">
+<li><p>Some of these channels are <strong>passive</strong> – so simply allow ions to diffuse across,</p></li>
+<li><p>But others are <strong>active</strong> and use energy to transports ions <strong>against</strong> their chemical gradient.</p></li>
+</ul>
+<p>The overall result of these ionic movements, is that each ion balances at an equilibrium: where it’s concentration gradient equals its electrostatic gradient. And this is known as it’s equilibrium or Nernst potential.</p>
+<p>Then the resting potential of the membrane is the sum of all of the equilibrium potentials, which is usually somewhere around –70mV.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Take-away
+So the resting potential is the neurons state when it has little or no input. 
+But when it receives inputs it can generate spikes.</p>
+</div>
+<div class="dropdown admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For more
+Check out <a class="reference external" href="https://www.youtube.com/watch?v=hk09AkV5_Kc">this video</a> on resting membrane potential</p>
+</div>
+</section>
+<section id="spikes">
+<h2>Spikes<a class="headerlink" href="#spikes" title="Link to this heading">¶</a></h2>
+<p><a class="reference internal" href="#spike"><span class="xref myst">This schematic</span></a> shows time on the x-axis (on the order of a few ms) and the neuron’s membrane potential on the y-axis in mV.</p>
+<ol class="arabic simple">
+<li><p>Inputs cause Na+ channels, in the membrane, to open and Na+ to flow into the cell down it’s concentration gradient. This raises the membrane potential, and if it rises high enough (past what is termed the gate threshold), voltage gated Na+ channels open, more Na+ flows in, and the membrane potential rises to it’s peak. This process ic termed depolarisation.</p></li>
+<li><p>At high voltages, Na+ channels close</p></li>
+<li><p>But, K+ channels open – and potassium flows out of the neuron, reducing the membrane potential</p></li>
+<li><p>This is called repolarization</p></li>
+<li><p>Interestingly, repolarization typically goes below the resting membrane potential, here going as low as –90mV. This is called hyperpolarization and it’s effect is to effectively raise the threshold for new stimuli to trigger a spike for a period of time, which we term the refractory period.</p></li>
+<li><p>After hyperpolarization, a combination of active and passive ionic movements eventually bring the membrane back to its resting state of -70 mV.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note
+Part of the importance of hyperpolarization is in preventing any stimulus already sent up an axon from triggering another action potential in the opposite direction. In other words, hyperpolarization assures that the signal is proceeding in one direction</p>
+</div>
+<figure class="align-center" id="id4">
+<img alt="Spike Schematic" src="../_images/spikes.png" />
+<figcaption>
+<p><span class="caption-text">Spike Schematic</span><a class="headerlink" href="#id4" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Given the complexity of this process, you may expect that spikes would be noisy, but if we return to our <a class="reference internal" href="#recordings"><span class="xref myst">single neuron recording</span></a>, we see that they are remarkably stereotypical in their shape. If we overlay, we see that the spikes from a given neuron all look alike.</p>
+<p>For example  see <a class="reference internal" href="#allornothing"><span class="xref myst">this figure</span></a>. On the left we see more than 100 spikes recorded from a real neuron, in response to different inputs.</p>
+<p>What this means is that each neuron’s spikes are essentially binary, all or nothing responses, and if neurons need to encode more complex information they must do so by varying the number or timing of their spikes. But, we’ll return to how neurons encode information later in the course.</p>
+<p>As each neuron’s spikes are so similar, sequences of spikes or spike trains are often plotted as binary events. For example, on the right is what we call a raster plot, and each row shows the spiking activity of a different neuron over time.</p>
+<figure class="align-center" id="id5">
+<img alt="Spike Variation" src="../_images/allornothing.png" />
+<figcaption>
+<p><span class="caption-text">Spike Variation and Raster Plot</span><a class="headerlink" href="#id5" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="dropdown admonition seealso">
+<p class="admonition-title">See also</p>
+<p>For more
+Check out <a class="reference external" href="https://www.youtube.com/watch?v=BbUcWbtVjT4">this video</a> and <a class="reference external" href="http://hyperphysics.phy-astr.gsu.edu/hbase/Biology/actpot.html#c5">this website</a> on neuron action potential</p>
+</div>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Linker
+But, while each neurons own spikes share the same shape, not all neurons are alike in their dynamics.</p>
+</div>
+</section>
+<section id="membrane-time-constant">
+<h2>Membrane Time Constant<a class="headerlink" href="#membrane-time-constant" title="Link to this heading">¶</a></h2>
+<p>Let’s think about injecting input current into a neuron.</p>
+<p>If we inject enough current we’ll raise it’s membrane potential past it’s gate threshold, and cause it to spike.</p>
+<p>But if we inject just a small amount of current transiently, then it’s membrane potential will increase and then decay back to rest. We term how long this decay takes, the <strong>membrane time constant</strong>, and it has been observed experimentally that different neurons differ in this value. So decay at different rates. And that is what is plotted <a class="reference internal" href="#timeconstant"><span class="xref myst">here</span></a> for two example neurons, though these are simulated.</p>
+<figure class="align-center" id="id6">
+<img alt="Membrane Time Constant" src="../_images/timeconstant.png" />
+<figcaption>
+<p><span class="caption-text">Measured Membrane Time Constant for Two Example Neurons</span><a class="headerlink" href="#id6" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>While this may seem far from machine learning, using neural network models to explore what role these features play in computation, or using biological features to boost performance are both exciting prospects.</p>
+<p>Just to give you one example along these lines. In <a class="reference external" href="https://doi.org/10.1038/s41467-021-26022-3">this paper</a> Dan and colleagues, built neural networks with heterogenous membrane time constants and showed that this lead to improvements in task performance.</p>
+<p>But how do you make artificial units with different membrane time constants?</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>That’s it!
+In the next section we’ll see how to model single neurons mathematically, and that will provide a foundation for later in the course when we cover how to build and train networks made up of spiking units.</p>
+</div>
+</section>
+</section>
+
+    </main>
+    <aside id="viewport">
+        <h2>Highlighted Elements</h2>
+        <div id="links-references">
+            <!-- Highlighted elements will be dynamically inserted here -->
+        </div>
+    </aside>
+    <script src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/highlight.js"></script>
+</body>
+</html>

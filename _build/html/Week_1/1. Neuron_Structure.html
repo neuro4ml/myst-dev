@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Neuron Structure</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../_static/pygments.css">
+    <link rel="stylesheet" href="../_static/css/custom.css">
+    <link rel="stylesheet" href="../_static/css/index.css">
+</head>
+<body>
+    <nav id="toc">
+        <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../hello.html">MyST Markdown Test File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../1_Neuron_Structure.html">Neuron Structure</a></li>
+</ul>
+
+    </nav>
+    <main id="content">
+        <section class="tex2jax_ignore mathjax_ignore" id="neuron-structure">
+<h1>Neuron Structure<a class="headerlink" href="#neuron-structure" title="Link to this heading">¶</a></h1>
+<p><a class="reference download internal" download="" href="../_downloads/fad2f6955a8fe5b9d376dfb6af7aa16f/W1-V0-structure.pptx"><span class="xref download myst">Downlod the slides here</span></a></p>
+<hr class="docutils" />
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<p>In this first week we’re going to focus on neurons - which are thought to be the brain’s primary processing units. We’ll cover 3 topics:</p>
+<ul class="simple">
+<li><p>Neuron Structure</p></li>
+<li><p>Neuron Function, and</p></li>
+<li><p>How we can model neurons mathematically and simulate them in code</p></li>
+</ul>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Note!
+<strong>This lecture focuses on Neuron Structure</strong></p>
+</div>
+</section>
+<section id="sensorimotor-transformation">
+<h2>Sensorimotor Transformation<a class="headerlink" href="#sensorimotor-transformation" title="Link to this heading">¶</a></h2>
+<p>We can think of both artificial neural networks and brains as computing input-output transformations. That is, they take <strong>input</strong> data, and <strong>output</strong> decisions.</p>
+<p>For example, a trained <abbr title="Artificial Neural Network">ANN</abbr> may take in images and output classes. Similarly, a predator may use its senses, like vision and hearing, to distinguish prey from other animals. In neuroscience we call this the sensorimotor transformation.</p>
+<figure class="align-center" id="id1">
+<img alt="Example {abbr}`ANN(Artificial Neural Network)`" src="../_images/sensorimotor.png" />
+<figcaption>
+<p><span class="caption-text">Example Sensorimotor Transformation</span><a class="headerlink" href="#id1" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Linker
+So, how do these systems compute these transformations?</p>
+</div>
+</section>
+<section id="units-and-neurons">
+<h2>Units and Neurons<a class="headerlink" href="#units-and-neurons" title="Link to this heading">¶</a></h2>
+<p>In <abbr title="Artificial Neural Network">ANNs</abbr>, these transformations are realized by units – which sum their weighted inputs and pass them through an activation function (like <abbr title="Rectified Linear Unit">ReLU</abbr>).</p>
+<p>In brains, the equivalent are <strong>neurons</strong> which are not just simple points, but complex 3D structures, like the neuron shown <a class="reference internal" href="#neuronactivation"><span class="xref myst">here</span></a>. Just to give you an idea of scale, the human brain contains around 86 billion neurons.</p>
+<figure class="align-center" id="id2">
+<img alt="Activation Function vs Neuron Diagram" src="../_images/activationvsneuron.png" />
+<figcaption>
+<p><span class="caption-text">Activation Function vs Neuron</span><a class="headerlink" href="#id2" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Linker
+So, what makes up a neuron?</p>
+</div>
+</section>
+<section id="neurons">
+<h2>Neurons<a class="headerlink" href="#neurons" title="Link to this heading">¶</a></h2>
+<p>Like other cells, neurons have:</p>
+<ul class="simple">
+<li><p>A fatty membrane which separates their inner contents from their surroundings</p></li>
+<li><p>Then inside, they are filled with a fluid known as cytoplasm</p></li>
+<li><p>In their cytoplasam, you’ll find things which are found in other cells, like a nucleus containing genetic material, which sits in their main cell body or soma.</p></li>
+</ul>
+<p>But, unlike many other cells, neurons act as information processing units:</p>
+<ul class="simple">
+<li><p>They receive inputs from other neurons via their dendritic tree. <a class="reference internal" href="#neuron"><span class="xref myst">Shown on the left</span></a>.</p></li>
+<li><p>Then they signal to other neurons, muscles or glands, via their axon. <a class="reference internal" href="#neuron"><span class="xref myst">Shown on the right</span></a>.</p></li>
+</ul>
+<figure class="align-center" id="id3">
+<img alt="Neuron Diagram" src="../_images/neurondiagram.png" />
+<figcaption>
+<p><span class="caption-text">Diagram of Neuron</span><a class="headerlink" href="#id3" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Remember
+While <a class="reference internal" href="#neuron"><span class="xref myst">this</span></a> is the sort cartoon we often use, <strong>neurons are actually incredibly diverse</strong></p>
+</div>
+<p>For example, <a class="reference external" href="https://doi.org/10.1038/s41586-020-2907-3">this paper</a> made <a class="reference internal" href="#paperresults"><span class="xref myst">detailed measurements</span></a> from over 1,000 neurons and concluded that there were around 70 types: which differ in several features – including their <abbr title="Size, shape and form">morphology</abbr>, which you can see here. Some of the neurons in blue look like the diagram we saw on the previous slide, but others, like those in pink look quite different.</p>
+<figure class="align-center" id="id4">
+<img alt="Neuron Diversity Measurements" src="../_images/neurondiversity.png" />
+<figcaption>
+<p><span class="caption-text">Paper Findings of Neuron Diversity</span><a class="headerlink" href="#id4" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>While you might assume that this complexity was reserved for, or unique to, the human brain.</p>
+<p>All of these 70 neuron types, and actually this whole study, is focused on just one part of the mouse brain.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Linker
+So, is this structural diversity just random, i.e. the result of noisy biological processes, or not?</p>
+</div>
+</section>
+<section id="is-structure-random">
+<h2>Is Structure Random?<a class="headerlink" href="#is-structure-random" title="Link to this heading">¶</a></h2>
+<p>In <a class="reference external" href="https://doi.org/10.1098/rspb.2018.2727">this paper</a>, the authors analyse the <abbr title="Size, shape and form">morphology</abbr> of over 10,000 real neurons from an open source dataset and show that they balance <abbr title="the amount of material needed to construct the branches">wiring costs</abbr> and <abbr title="the distance between their cell body and their points of contact with other neurons">conduction delays</abbr>.</p>
+<figure class="align-center" id="id5">
+<img alt="Morphology of Neurons" src="../_images/morphology.png" />
+<figcaption>
+<p><span class="caption-text">Analysis of Neuron <abbr title="Size, shape and form">Morphology</abbr></span><a class="headerlink" href="#id5" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>In <a class="reference internal" href="#randomstructure"><span class="xref myst">Figure 5a</span></a>, the black circles represent the soma or cell body of the neuron. The green circles, show the inputs, and the red circle shows a branch point. And what this figure shows is how it’s possible to wire the connections from green to black in different ways.</p>
+<p>On the left, is the tree with the minimum <abbr title="the amount of material needed to construct the branches">wiring cost</abbr>. 
+In the middle is the tree with the minimum <abbr title="the distance between their cell body and their points of contact with other neurons">conduction delay</abbr>. 
+On the right is an intermediate tree.</p>
+<p>Now, as these two objectives, minimizing <abbr title="the amount of material needed to construct the branches">wiring cost</abbr> and <abbr title="the distance between their cell body and their points of contact with other neurons">conduction delay</abbr>, compete with each other, they form a Pareto front, where improving one leads to a loss in the other. This is shown in <a class="reference internal" href="#randomstructure"><span class="xref myst">Figure 5b</span></a>, where the x axis is the <abbr title="the amount of material needed to construct the branches">wiring cost</abbr>, the y-axis is the <abbr title="the distance between their cell body and their points of contact with other neurons">conduction delay</abbr>, and the front shows how improving one impairs the other. For example, decreasing the <abbr title="the distance between their cell body and their points of contact with other neurons">conduction delay</abbr>, leads to an increase in <abbr title="the amount of material needed to construct the branches">wiring cost</abbr>.</p>
+<p>Then with this front defined, you can measure how far any given tree falls from it, as shown by the red cross.</p>
+<p>What the authors conclude is:</p>
+<ul class="simple">
+<li><p>That <abbr title="dendrites and axons">neural arbors</abbr> are much closer to being Pareto optimal than you would expect by chance.</p></li>
+<li><p>Suggesting that neuron structure is not random, but strikes a balance between optimizing wiring cost and conduction delays.</p></li>
+</ul>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Linker
+So, how does this sort of structure impact computation?</p>
+</div>
+</section>
+<section id="how-does-structure-impact-computation">
+<h2>How Does Structure Impact Computation?<a class="headerlink" href="#how-does-structure-impact-computation" title="Link to this heading">¶</a></h2>
+<p>Frankly, that’s an open question, so rather than giving you an answer, I’m just going to give you one example of the type of work people are pursuing in this direction.</p>
+<p>The authors of <a class="reference external" href="https://doi.org/10.1162/neco_a_01390">this paper</a> model a single neuron and study how changing the properties of it’s dendritic tree (which process it’s inputs) alters it’s ability to solve classic machine learning benchmarks like <abbr title="Modified National Institute of Standards and Technology Dataset">MNIST</abbr>.</p>
+<figure class="align-center" id="id6">
+<img alt="Study of Changing Dentritic Tree and Computation" src="../_images/dendcomp1.png" />
+<figcaption>
+<p><span class="caption-text">Study of Changing Dentritic Tree and Computation</span><a class="headerlink" href="#id6" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>Shown on the left here is an outline of a real neuron. It’s cell body is marked in pink and the black lines show it’s dendritic tree. From examining these trees, researchers have found two interesting features: their branched <abbr title="Size, shape and form">morphology</abbr> and repeated inputs.</p>
+<p>These features are shown schematically in the middle. Here we have a single neuron with it’s soma in pink, an output axon, and four numbered inputs, in dark blue, to it’s dendritic tree. As you can see these inputs are divided into two branches, and this structure is repeated across sub-trees which are shown in light blue.</p>
+<p>These features are shown schematically in the middle. Here we have a single neuron with it’s soma in pink, an output axon, and four numbered inputs, in dark blue, to it’s dendritic tree. As you can see these inputs are divided into two branches, and this structure is repeated across sub-trees which are shown in light blue.</p>
+<p>What they conclude is that:</p>
+<ul class="simple">
+<li><p>The performance of their tree model improves as you increase k (the number of repeated subtrees)</p></li>
+<li><p>But degrades when you make the trees more realistic by making them asymmetrical.</p></li>
+</ul>
+<p>Which suggests that there is still lots left to explore in this space!</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>That’s it!
+Okay, that’s all for neuron structure. In the next section we’ll move onto neuron function.</p>
+</div>
+</section>
+</section>
+
+    </main>
+    <aside id="viewport">
+        <h2>Highlighted Elements</h2>
+        <div id="links-references">
+            <!-- Highlighted elements will be dynamically inserted here -->
+        </div>
+    </aside>
+    <script src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/highlight.js"></script>
+</body>
+</html>

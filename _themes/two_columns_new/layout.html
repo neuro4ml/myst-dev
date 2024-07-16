@@ -8,7 +8,6 @@
     {%- for css_file in css_files %}
     <link rel="stylesheet" href="{{ pathto(css_file, 1) }}">
     {%- endfor %}
-    <link rel="stylesheet" href="index.css">
 </head>
 <body>
     <nav id="toc">
@@ -27,46 +26,5 @@
     {%- for script_file in script_files %}
     <script src="{{ pathto(script_file, 1) }}"></script>
     {%- endfor %}
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const content = document.getElementById('content');
-            const viewport = document.getElementById('links-references');
-
-            // Highlight all 'a' elements with class 'reference external'
-            content.querySelectorAll('a.reference.external').forEach(el => {
-                el.classList.add('highlight');
-            });
-
-            // Highlight all 'span' elements with class 'xref myst'
-            content.querySelectorAll('span.xref.myst').forEach(el => {
-                el.classList.add('highlight');
-            });
-
-            // Highlight all 'figure' elements
-            content.querySelectorAll('figure').forEach(el => {
-                el.classList.add('highlight');
-            });
-
-            // Move highlighted elements to the right-hand column with spacing
-            function moveHighlightedElements() {
-                const highlightedElements = content.querySelectorAll('.highlight');
-                viewport.innerHTML = ''; // Clear previous content
-
-                highlightedElements.forEach((el, index) => {
-                    const clone = el.cloneNode(true);
-                    if (index > 0) {
-                        viewport.appendChild(document.createElement('br')); // Add spacing between elements
-                    }
-                    viewport.appendChild(clone);
-                });
-            }
-
-            // Initial move of highlighted elements
-            moveHighlightedElements();
-
-            // Listen for scroll events to update highlighted elements
-            window.addEventListener('scroll', moveHighlightedElements);
-        });
-    </script>
 </body>
 </html>

@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../../../_static/pygments.css">
     <link rel="stylesheet" href="../../../../_static/css/custom.css">
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="../../../../_static/css/index.css">
 </head>
 <body>
     <nav id="toc">
@@ -84,46 +84,6 @@ Finally, run <code class="docutils literal notranslate"><span class="pre">python
     <script src="../../../../_static/documentation_options.js"></script>
     <script src="../../../../_static/doctools.js"></script>
     <script src="../../../../_static/sphinx_highlight.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const content = document.getElementById('content');
-            const viewport = document.getElementById('links-references');
-
-            // Highlight all 'a' elements with class 'reference external'
-            content.querySelectorAll('a.reference.external').forEach(el => {
-                el.classList.add('highlight');
-            });
-
-            // Highlight all 'span' elements with class 'xref myst'
-            content.querySelectorAll('span.xref.myst').forEach(el => {
-                el.classList.add('highlight');
-            });
-
-            // Highlight all 'figure' elements
-            content.querySelectorAll('figure').forEach(el => {
-                el.classList.add('highlight');
-            });
-
-            // Move highlighted elements to the right-hand column with spacing
-            function moveHighlightedElements() {
-                const highlightedElements = content.querySelectorAll('.highlight');
-                viewport.innerHTML = ''; // Clear previous content
-
-                highlightedElements.forEach((el, index) => {
-                    const clone = el.cloneNode(true);
-                    if (index > 0) {
-                        viewport.appendChild(document.createElement('br')); // Add spacing between elements
-                    }
-                    viewport.appendChild(clone);
-                });
-            }
-
-            // Initial move of highlighted elements
-            moveHighlightedElements();
-
-            // Listen for scroll events to update highlighted elements
-            window.addEventListener('scroll', moveHighlightedElements);
-        });
-    </script>
+    <script src="../../../../_static/js/highlight.js"></script>
 </body>
 </html>

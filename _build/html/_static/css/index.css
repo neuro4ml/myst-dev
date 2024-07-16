@@ -23,6 +23,10 @@
   font-size: 1.5em;
 }
 
+img {
+  max-width: 100%;
+}
+
 .highlight {
   background-color: yellow;
   padding: 5px; /* Adjust spacing as needed */

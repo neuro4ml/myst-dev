@@ -27,3 +27,8 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 html_theme = 'two_columns_new'
 html_theme_path = ['_themes']
 html_static_path = ['_static']
+
+# Add custom CSS from the theme's static directory
+def setup(app):
+    app.add_css_file('css/index.css')
+    app.add_js_file('js/highlight.js')  # Add this line to include your custom JavaScript file

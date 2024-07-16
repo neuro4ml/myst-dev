@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Synapse Models</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../_static/pygments.css">
+    <link rel="stylesheet" href="../_static/css/custom.css">
+    <link rel="stylesheet" href="../_static/css/index.css">
+</head>
+<body>
+    <nav id="toc">
+        <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../hello.html">MyST Markdown Test File</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../1_Neuron_Structure.html">Neuron Structure</a></li>
+</ul>
+
+    </nav>
+    <main id="content">
+        <section class="tex2jax_ignore mathjax_ignore" id="synapse-models">
+<h1>Synapse Models<a class="headerlink" href="#synapse-models" title="Link to this heading">¶</a></h1>
+<p><a class="reference download internal" download="" href="../_downloads/a5d0cbee47227e39d71f565143ee2716/W2-V3-synapse-models.pptx"><span class="xref download myst">Downlod the slides here</span></a></p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<p>Last week we went through a lot of detailed biology, and now we’re going to turn that into relatively simple equations.</p>
+</section>
+<section id="level-of-abstraction">
+<h2>Level of Abstraction<a class="headerlink" href="#level-of-abstraction" title="Link to this heading">¶</a></h2>
+<p>Previously we explained how when a spike arrives at a transmitting synapse, a neurotransmitter is released. This neurotransmitter causes a change in the conductance of the receiving cell due to the opening of an associated ion channel. In turn, this leads to an input current following the same sort of equations we saw for the <a class="reference internal" href="#biophysical-models#hodkin-huxley-label"><span class="xref myst">Hodgkin-Huxley</span></a> formalism last week. This then leads to a change in membrane potential for either the
+<a class="reference internal" href="#..week1/biophysical-models.md/#hodkin-huxley-label"><span class="xref myst">Hodgkin-Huxley</span></a> or leaky integrate-and-fire type neurons. Just as we did for neuron, we need to decide what level of detail we want to include in our synapse model.
+One reason we might want to leave out some of this detail is that some of these changes will happen fast enough that modelling their temporal dynamics won’t change much at the scale we’re looking at.</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/synapse-modelsPicture1.png"><img alt="../_images/synapse-modelsPicture1.png" src="../_images/synapse-modelsPicture1.png" style="width: 100%;" /></a>
+</figure>
+<p>A helpful picture to draw is the postsynaptic potential, sometimes referred to simply as a PSP (shown below). This shows the increase in the membrane potential of the receiving cell as a result of a spike arriving at that cell. In this figure you can see a model synapse at three levels of detail:</p>
+<ul class="simple">
+<li><p>Blue - instantaneous increase in the membrane potential</p></li>
+<li><p>Orange - instantaneous increase in a current, which then decays exponentially back to rest</p></li>
+<li><p>Green - instantaneous increase to the conductance.</p></li>
+</ul>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/synapse-modelsPicture2.png"><img alt="../_images/synapse-modelsPicture2.png" src="../_images/synapse-modelsPicture2.png" style="width: 400px;" /></a>
+</figure>
+</section>
+<section id="synapse-time-course">
+<h2>Synapse Time Course<a class="headerlink" href="#synapse-time-course" title="Link to this heading">¶</a></h2>
+<p>We will start with how we can directly model the dynamics in terms of <strong>conductance</strong>, <strong>current</strong> or <strong>membrane potential</strong>. A common approach is to decide the key synaptic variable and model it with one of the 3 classes of functions. There’s an explanation as to why these 3 classes come up that we’ll return to later.</p>
+<p>For simplicity, we’ll describe each of these as postsynaptic membrane potentials, although they can also be used to model currents or conductance.</p>
+<p>The fist case is the exponential function which can be written as the product of an exponential decay with some time constant and a <a class="reference external" href="https://en.wikipedia.org/wiki/Heaviside_step_function">Heaviside function</a>.</p>
+<div class="math notranslate nohighlight" id="equation-exponential-eq">
+<span class="eqno">(1)<a class="headerlink" href="#equation-exponential-eq" title="Link to this equation">¶</a></span>\[v(t) = H(t)e^{-t/\tau}\]</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/synapse-modelsPicture3.png"><img alt="../_images/synapse-modelsPicture3.png" src="../_images/synapse-modelsPicture3.png" style="width: 100%;" /></a>
+</figure>
+<p>A step-up in complexity is the alpha function which we haven’t seen before. In this equation, we multiply the exponential decay by t so that it rises continuously before decaying.</p>
+<div class="math notranslate nohighlight" id="equation-alpha-eq">
+<span class="eqno">(2)<a class="headerlink" href="#equation-alpha-eq" title="Link to this equation">¶</a></span>\[v(t) = H(t)e^{-t/\tau}t/\tau\]</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/synapse-modelsPicture4.png"><img alt="../_images/synapse-modelsPicture4.png" src="../_images/synapse-modelsPicture4.png" style="width: 100%;" /></a>
+</figure>
+<p>A further step-up is the biexponential function, which lets us seperately control the rise and fall time with 2 different time constraints.</p>
+<div class="math notranslate nohighlight" id="equation-biexponential-eq">
+<span class="eqno">(3)<a class="headerlink" href="#equation-biexponential-eq" title="Link to this equation">¶</a></span>\[\begin{split}v(t) = H(t)(e^{-t/\tau} - e^{-t/\tau_x}) \\
+\tau_x \neq \tau \end{split}\]</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/synapse-modelsPicture5.png"><img alt="../_images/synapse-modelsPicture5.png" src="../_images/synapse-modelsPicture5.png" style="width: 100%;" /></a>
+</figure>
+<p>Each of these can be represented as a linear time invariant differential equation with constant coefficients. This makes sense since we would expect time invariance in a model of a physical system. Having linearity and constant coefficients is the simplest thing we can do.</p>
+<ul class="simple">
+<li><p><abbr title="Odinary Differential Equation">ODE</abbr> for <a class="reference internal" href="#equation-exponential-eq">(1)</a>:</p></li>
+</ul>
+<div class="math notranslate nohighlight" id="equation-exp-diff">
+<span class="eqno">(4)<a class="headerlink" href="#equation-exp-diff" title="Link to this equation">¶</a></span>\[\begin{split}\tau v' = -v \\
+v(0) = 1\end{split}\]</div>
+<ul class="simple">
+<li><p><abbr title="Odinary Differential Equation">ODE</abbr> for <a class="reference internal" href="#equation-alpha-eq">(2)</a>:</p></li>
+</ul>
+<div class="math notranslate nohighlight" id="equation-alpha-diff">
+<span class="eqno">(5)<a class="headerlink" href="#equation-alpha-diff" title="Link to this equation">¶</a></span>\[\begin{split}\tau v' = x-v \\
+\tau x' = -x \\
+x(0) = 1\end{split}\]</div>
+<ul class="simple">
+<li><p><abbr title="Odinary Differential Equation">ODE</abbr> for <a class="reference internal" href="#equation-biexponential-eq">(3)</a>:</p></li>
+</ul>
+<div class="math notranslate nohighlight" id="equation-biexp-diff">
+<span class="eqno">(6)<a class="headerlink" href="#equation-biexp-diff" title="Link to this equation">¶</a></span>\[\begin{split}\tau v' = x-v \\
+\tau_x x' = -x \\
+x(0) = 1\end{split}\]</div>
+<p>We can take this argument further by putting these equations into matrix form and calculating their eigenvalues.</p>
+<ul class="simple">
+<li><p>Matrix form for <a class="reference internal" href="#equation-exponential-eq">(1)</a>:</p></li>
+</ul>
+<div class="math notranslate nohighlight" id="equation-exp-matrix">
+<span class="eqno">(7)<a class="headerlink" href="#equation-exp-matrix" title="Link to this equation">¶</a></span>\[\begin{split}\boldsymbol{y} = (v) \\
+M = (-1/\tau) \\
+\textcolor{red}{Single \space eigenvalue -1/\tau}\end{split}\]</div>
+<ul class="simple">
+<li><p>Matrix form for <a class="reference internal" href="#equation-alpha-eq">(2)</a>:</p></li>
+</ul>
+<div class="math notranslate nohighlight" id="equation-alpha-matrix">
+<span class="eqno">(8)<a class="headerlink" href="#equation-alpha-matrix" title="Link to this equation">¶</a></span>\[\begin{split}\boldsymbol{y} = (v,x) \\
+M = \begin{pmatrix}
+-1/\tau &amp; 1 \\
+0 &amp; -1/\tau
+\end{pmatrix} \\
+\textcolor{red}{Repeated \space eigenvalue -1/\tau}\end{split}\]</div>
+<ul class="simple">
+<li><p>Matrix form for <a class="reference internal" href="#equation-biexponential-eq">(3)</a>:</p></li>
+</ul>
+<div class="math notranslate nohighlight" id="equation-biexp-matrix">
+<span class="eqno">(9)<a class="headerlink" href="#equation-biexp-matrix" title="Link to this equation">¶</a></span>\[\begin{split}\boldsymbol{y} = (v,x) \\
+M = \begin{pmatrix}
+-1/\tau &amp; 1 \\
+0 &amp; -1/\tau_x
+\end{pmatrix} \\
+\textcolor{red}{Two \space eigenvalues -1/\tau, -1/\tau_x}\end{split}\]</div>
+<p>These three forms are essentially the only possibilities for a 1 or 2-dimensional system that is linear, time invariant and has constant coefficients.
+The <a class="reference internal" href="#equation-exp-matrix">(7)</a> is the only possibility for 1 dimension, and in 2 dimensions you either get the <a class="reference internal" href="#equation-alpha-matrix">(8)</a> or <a class="reference internal" href="#equation-biexp-matrix">(9)</a> depending on whether the eigenvalue is repeated.</p>
+<div class="dropdown admonition note">
+<p class="admonition-title">Note</p>
+<p>Differential Equations
+The differential equation:</p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{y}' = M \boldsymbol{y}\]</div>
+<p>Has solutions:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\boldsymbol{y}(t) = \boldsymbol{y}^*e^{\lambda t} \\
+\text{For eigenvalues } \lambda \\
+\text{Eigenvectors } \boldsymbol{y}^*\end{split}\]</div>
+<p>Repeated eigenvalues give</p>
+<div class="math notranslate nohighlight">
+\[\boldsymbol{y}(t) = \boldsymbol{y}^*te^{\lambda t}, \space t^2e^{\lambda t}\]</div>
+</div>
+</section>
+<section id="short-term-plasticity">
+<h2>Short-term Plasticity<a class="headerlink" href="#short-term-plasticity" title="Link to this heading">¶</a></h2>
+<p>So far we’ve looked at memoryless models of synapses, where previous activity doesn’t affect what they do, but this isn’t quite right. Neurotransmitters are released in vesicles, and after being released, a fraction of them will be unavailable if another spike comes along. This means that later spikes will likely have a smaller effect than earlier spikes. This is called <strong>short-term synaptic depression</strong>. We can model it by addind an extra variable x that tracks what fraction of vesicles are available.</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/synapse-modelsPicture6.png"><img alt="../_images/synapse-modelsPicture6.png" src="../_images/synapse-modelsPicture6.png" style="width: 500px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/synapse-modelsPicture8.png"><img alt="../_images/synapse-modelsPicture8.png" src="../_images/synapse-modelsPicture8.png" style="width: 300px;" /></a>
+</figure>
+<!-- This bit is not yet finished -->
+<p>However, it turns out that you also see cases where each subsequent spike has a bigger effect than previous spikes, which is calle <strong>facilitation</strong>.</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/synapse-modelsPicture7.png"><img alt="../_images/synapse-modelsPicture7.png" src="../_images/synapse-modelsPicture7.png" style="width: 280px;" /></a>
+</figure>
+</section>
+</section>
+
+    </main>
+    <aside id="viewport">
+        <h2>Highlighted Elements</h2>
+        <div id="links-references">
+            <!-- Highlighted elements will be dynamically inserted here -->
+        </div>
+    </aside>
+    <script src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/highlight.js"></script>
+    <script src="../"></script>
+    <script src="../https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+</html>

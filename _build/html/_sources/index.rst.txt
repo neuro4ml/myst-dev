@@ -11,7 +11,13 @@ Welcome to Custom-Theme's documentation!
    :caption: Contents:
 
    hello
-   1_Neuron_Structure
+   Week_1/1_Neuron_Structure
+   Week_1/2_Neuron_Function
+   Week_1/3_Abstract_Models
+   Week_1/4_Biophysical_Models
+   Week_1/5_w1-models
+   Week_1/6_w1-exercises
+   Week_1/7_W1-reading
 
 
 
