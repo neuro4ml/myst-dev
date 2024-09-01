@@ -1,28 +1,45 @@
-# Minimal makefile for Sphinx documentation
-#
+.PHONY: build-theme build-article build-book deploy-theme deploy-article deploy-book check
 
-# You can set these variables from the command line, and also
-# from the environment for the first two.
-SPHINXOPTS    ?=
-SPHINXBUILD   ?= sphinx-build
-SOURCEDIR     = .
-BUILDDIR      = _build
+COMMIT = $(shell git rev-parse --short HEAD)
+# You may need to install jq for this to work!
+VERSION = $(shell cat packages/site/package.json | jq -r '.version')
 
-# Path to your SASS source and output directories
-SASS_SRC      = ./_themes/two_columns_new/sass/
-SASS_OUT      = ./_themes/two_columns_new/static/css/
+THEME=article
 
-# Put it first so that "make" without argument is like "make help".
-help:
-	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+check:
+	@which jq > /dev/null || (echo "Error: the jq linux command is not available. Please install it first (brew install jq | apt-get install jq)." && exit 1)
 
-.PHONY: help Makefile sass
+build-theme:
+	mkdir .deploy || true
+	rm -rf .deploy/$(THEME)
+	git clone --depth 1 https://github.com/myst-templates/$(THEME)-theme .deploy/$(THEME)
+	rm -rf .deploy/$(THEME)/public .deploy/$(THEME)/build .deploy/$(THEME)/package.json .deploy/$(THEME)/package-lock.json .deploy/$(THEME)/template.yml .deploy/$(THEME)/server.js
+	find template -type f  -exec cp {} .deploy/$(THEME) \;
+	cd themes/$(THEME) && npm run prod:build
+	cp -r themes/$(THEME)/public .deploy/$(THEME)/public
+	cp -r themes/$(THEME)/build .deploy/$(THEME)/build
+	cp -r themes/$(THEME)/template.yml .deploy/$(THEME)/template.yml
+	sed -i.bak "s/template/$(THEME)/g" .deploy/$(THEME)/package.json
+	sed -i.bak "s/VERSION/$(VERSION)/g" .deploy/$(THEME)/package.json
+	rm .deploy/$(THEME)/package.json.bak
+	cd .deploy/$(THEME) && npm install
 
-# Target to start the SASS watcher
-sass:
-	@sass --watch $(SASS_SRC):$(SASS_OUT) &
+build-article:
+	make THEME=article build-theme
 
-# Integrate the SASS watcher with the default Sphinx build targets
-%: Makefile
-	@$(MAKE) sass
-	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+build-book:
+	make THEME=book build-theme
+
+deploy-theme: check
+	echo "Deploying $(THEME) theme to myst-templates/$(THEME)-theme"
+	echo "Version: $(VERSION)"
+	make THEME=$(THEME) build-theme
+	cd .deploy/$(THEME) && git add .
+	cd .deploy/$(THEME) && git commit -m "🚀 v$(VERSION) from $(COMMIT)"
+	cd .deploy/$(THEME) && git push -u origin main
+
+deploy-article:
+	make THEME=article deploy-theme
+
+deploy-book:
+	make THEME=book deploy-theme

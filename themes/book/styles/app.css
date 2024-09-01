@@ -1,0 +1,4 @@
+@import '@myst-theme/styles';
+html {
+    overflow: hidden;   /* Prevent scrolling of whole page; only columns */
+}

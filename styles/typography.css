@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .smallcaps {
+    font-variant: small-caps;
+  }
+}
+
+@layer base {
+  .prose table td {
+    @apply p-1 align-top sm:p-2;
+  }
+  .prose table p,
+  .prose table li {
+    @apply mt-0 mb-0;
+  }
+  .prose figure table {
+    @apply mt-5 mb-0;
+  }
+  .prose table ul > li,
+  .prose table ol > li {
+    @apply pl-0;
+  }
+  .prose table tr:hover td {
+    @apply bg-slate-50 dark:bg-stone-800;
+  }
+  .prose table td dl {
+    margin: 0;
+  }
+  .prose dt > strong {
+    @apply font-bold text-blue-900 dark:text-blue-100;
+  }
+  .prose dd {
+    @apply ml-8;
+  }
+  .prose p img {
+    margin: 0;
+    display: inline-block;
+  }
+  article.content {
+    min-height: calc(100vh);
+  }
+  .article {
+    @apply prose break-words max-w-none prose-stone dark:prose-invert;
+  }
+}
