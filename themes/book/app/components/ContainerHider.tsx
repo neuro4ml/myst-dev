@@ -39,9 +39,17 @@ const ContainerHider: React.FC = () => {
             const original = originalRefs.current.get(id);
 
             if (copy && original) {
-              original.style.color = 'red';
-              original.style.visibility = 'hidden';
-              original.style.marginBottom = `-${original.offsetHeight}px`;
+              console.log("PArent Width: " + parent.innerWidth);
+              if (parent.innerWidth) {
+                original.style.color = 'red';
+                original.style.visibility = 'hidden';
+                original.style.marginBottom = `-${original.offsetHeight}px`;
+              }
+              else {
+                original.style.visibility = 'visible';
+                original.style.marginBottom = '0';
+              }
+              
               if (entry.isIntersecting) {
                 copy.style.transition = 'all 0.3s ease-out';
                 copy.style.opacity = '1';

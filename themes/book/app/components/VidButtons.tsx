@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { ArrowUpToLine, ArrowDownToLine } from 'lucide-react';
 
 interface VidButtonsProps {
+  firstIndex: number | null;
   divElements: HTMLDivElement[];
 }
 
-const VidButtons: React.FC<VidButtonsProps> = ({ divElements }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isFirstClick, setIsFirstClick] = useState(true);
+const VidButtons: React.FC<VidButtonsProps> = ({ firstIndex, divElements }) => {
 
   const scrollToElement = (index: number) => {
     if (divElements[index]) {
@@ -20,24 +19,16 @@ const VidButtons: React.FC<VidButtonsProps> = ({ divElements }) => {
   };
   
   const handleUpClick = () => {
-    setCurrentIndex((prevIndex) => {
-      const newIndex = prevIndex > 0 ? prevIndex - 1 : divElements.length - 1;
-      scrollToElement(newIndex);
-      return newIndex;
-    });
+    console.log(firstIndex);
+    if (firstIndex != null) {
+      scrollToElement(firstIndex > 0 ? firstIndex - 1 : divElements.length - 1)
+    }
   };
   
   const handleDownClick = () => {
-    if (isFirstClick) {
-      setCurrentIndex(0);
-      scrollToElement(0);
-      setIsFirstClick(false);
-    } else {    
-      setCurrentIndex((prevIndex) => {
-        const newIndex = prevIndex < divElements.length - 1 ? prevIndex + 1 : 0;
-        scrollToElement(newIndex);
-        return newIndex;
-      });
+    console.log(firstIndex);
+    if (firstIndex != null) {
+      scrollToElement(firstIndex < divElements.length - 1 ? firstIndex + 1 : 0)
     }
   };
   

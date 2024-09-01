@@ -88,7 +88,11 @@ export function ArticlePageAndNavigation({
   const { container, toc } = useTocHeight(top, inset);
   return (
     <UiStateProvider>
-      <TopNav />
+      <TopNav>
+        <text>
+          GASk
+        </text>
+      </TopNav>
       <TabStateProvider>
         <article ref={container} className="article content h-screen fixed" style={{ marginTop: top }}>
           {children}

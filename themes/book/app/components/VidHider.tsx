@@ -123,7 +123,7 @@ const VidHider: React.FC = () => {
   return (
     <>
       <LineConnector pairs={linePairs} />
-      {(firstElemIndex != null) && <VidButtons divElements={orderedVidContents}/>}
+      {(firstElemIndex != null) && <VidButtons firstIndex={firstElemIndex} divElements={orderedVidContents}/>}
       
     </>
   );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   GridSystemProvider,
   ReferencesProvider,
@@ -86,6 +86,9 @@ export const ArticlePage = React.memo(function ({
   const keywords = article.frontmatter?.keywords ?? [];
   const parts = extractKnownParts(tree);
 
+  const [showSidebar, setShowSidebar] = useState(true);
+
+
   const sideBarTypes = 'container,proof,math';
   const containers: GenericNode[] = [];
   const videos: GenericNode[] = [];
@@ -145,7 +148,7 @@ export const ArticlePage = React.memo(function ({
   return (
     <GridSystemProvider gridSystem={gridChoice}>
       <div className="flex flex-row h-screen">
-        <main className="w-8/12 h-full px-4 overflow-auto">
+        <main className={`${showSidebar ? 'w-8/12' : 'w-full visible'} h-full px-4 overflow-auto`}>
           <ReferencesProvider
             references={{ ...article.references, article: article.mdast }}
             frontmatter={article.frontmatter}
@@ -168,6 +171,9 @@ export const ArticlePage = React.memo(function ({
                 )}
                 <div id="skip-to-article" />
                 <FrontmatterParts parts={parts} keywords={keywords} hideKeywords={hideKeywords} />
+                <button onClick={() => setShowSidebar(!showSidebar)}>
+                  Toggle Sidebar
+                </button>
                 <ContentBlocks pageKind={article.kind} mdast={tree as GenericParent} />
                 <BackmatterParts parts={parts} />
                 <Footnotes />
@@ -180,7 +186,7 @@ export const ArticlePage = React.memo(function ({
             </BusyScopeProvider>
           </ReferencesProvider>
         </main>
-        <section className="w-4/12 h-full flex flex-col border-l px-1">
+        <section className={`${showSidebar ? 'w-4/12' : 'w-\[0px\]'} h-full flex flex-col border-l px-1`}>
           <div className="pt-5"></div>
           <div className="pt-5"></div>
           <div className="pt-5"></div>
