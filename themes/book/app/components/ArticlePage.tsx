@@ -39,6 +39,7 @@ import { visit, SKIP } from 'unist-util-visit';
 import VideoVolume from './VideoVolume.js';
 import ContainerHider from './ContainerHider.js';
 import VidHider from './VidHider.js';
+import SidebarMedia from './SidebarMedia.js';
 import { MyST } from 'myst-to-react';
 
 
@@ -57,6 +58,13 @@ function combineDownloads(
     return [...(pageFrontmatter.exports ?? []), ...siteDownloads];
   }
   return pageFrontmatter.exports;
+}
+
+function deepCopyNode(node: GenericNode): GenericNode {
+  return {
+    ...node,
+    children: node.children ? node.children.map(child => deepCopyNode(child)) : undefined,
+  };
 }
 
 const TOP_OFFSET = 33;
@@ -88,61 +96,20 @@ export const ArticlePage = React.memo(function ({
 
   const [showSidebar, setShowSidebar] = useState(true);
 
-
   const sideBarTypes = 'container,proof,math';
   const containers: GenericNode[] = [];
   const videos: GenericNode[] = [];
-  var vidFlag: String = "";
   let IDCount = 0;
   visit(tree, (node, index, parent) => {
     if (matches(sideBarTypes, node)) {
-
-      if (matches('container', node)) {
-        const child = node.children && node.children[0];
-        if (child && child.type === 'image' && child.url) {
-          // Check if the URL ends with .mp4
-          const isMP4 = child.url.toLowerCase().endsWith('.mp4');
-          if (isMP4) {
-            // This container has an MP4 content
-            console.log('Found MP4 container:', node.identifier || 'Unidentified container');
-            // Push the node to videos
-            videos.push(node);
-            vidFlag = "vid-";
-          }
-          else {
-            // Push the node to containers
-            containers.push(node);
-            vidFlag = "";
-          }
-        }
-      }
-      
-  
-      // Ensure parent and index are valid
-      if (parent && typeof index === 'number') {
-        // Checks for existing identifier and generates unique ID if not
-        if (!node.identifier) {
-          node.identifier = String('alloc_node_id_' + IDCount);
-          IDCount++;
-        }
-        // Append vidFlag
-        node.identifier = vidFlag + node.identifier;
-        // Insert a new div with text equal to the id of the node
-        parent.children.splice(index + 1, 0, {
-          type: 'element',
-          children: [
-            {
-              type: 'text',
-              value: node.identifier,
-            },
-          ],
-        }); 
-      }
+      if(!node.identifier) {
+        node.identifier = "alloc_node_" + IDCount++;
+      } 
+      containers.push(node);
   
       return SKIP;
     }
   });
-  remove(tree, (node) => matches(sideBarTypes, node));
 
   const gridChoice = 'none';
   return (
@@ -186,22 +153,7 @@ export const ArticlePage = React.memo(function ({
             </BusyScopeProvider>
           </ReferencesProvider>
         </main>
-        <section className={`${showSidebar ? 'w-4/12' : 'w-\[0px\]'} h-full flex flex-col border-l px-1`}>
-          <div className="pt-5"></div>
-          <div className="pt-5"></div>
-          <div className="pt-5"></div>
-          <div className="flex-grow overflow-auto px-4">
-            
-            <div className="rightColumnText  cursor-pointer hover\:no-underline:hover"> {/* Styling applied to prevent jumping out-of-bounds */}
-              <ContainerHider />
-              <MyST ast={containers}></MyST>
-            </div>
-          </div>
-          <div className="rightColumnMediaPlayer mt-auto px-4 py-2 flex flex-column">
-            <VideoVolume ast={videos} /> {/* The MyST parser but with styling to set the video volume and parameters */}
-            <VidHider />
-          </div>
-        </section>
+        <SidebarMedia showSidebar={showSidebar} containers={containers} />
       </div>
     </GridSystemProvider>
   );

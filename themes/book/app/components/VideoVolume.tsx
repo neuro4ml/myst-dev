@@ -13,7 +13,7 @@ function VideoVolume({ ast }: VideoVolumeProps) {
         videos.forEach(video => {
             video.loop = false;
             video.muted = false;
-            video.autoplay = false;
+            video.autoplay = true;
 
         });
     }, []);
