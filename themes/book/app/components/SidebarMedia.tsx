@@ -3,6 +3,7 @@ import { MyST } from "myst-to-react";
 import React, { useEffect, useRef, useState } from "react";
 import VideoVolume from "./VideoVolume";
 import SidebarMediaHandler from "./SidebarMediaHandler";
+import SidebarVideoHandler from "./SidebarVideoHandler";
 
 interface SidebarMediaProps {
   showSidebar: boolean;
@@ -81,7 +82,7 @@ const SidebarMedia: React.FC<SidebarMediaProps> = ({ showSidebar, containers }) 
         </div>
       </div>
       <div className="rightColumnMediaPlayer mt-auto px-4 py-2 flex flex-column">
-        <VideoVolume ast={sidebarVideos} />
+        <SidebarVideoHandler showSidebar={showSidebar} containers={sidebarVideos} />
       </div>
     </section>
   );

@@ -3,7 +3,7 @@ import { ArrowUpToLine, ArrowDownToLine } from 'lucide-react';
 
 interface VidButtonsProps {
   firstIndex: number | null;
-  divElements: HTMLDivElement[];
+  divElements: HTMLElement[];
 }
 
 const VidButtons: React.FC<VidButtonsProps> = ({ firstIndex, divElements }) => {

@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { GenericNode } from "myst-common";
 import { MyST } from "myst-to-react";
+import VideoVolume from "./VideoVolume";
 
 interface SidebarMediaHandlerProps {
   showSidebar: boolean;
@@ -9,6 +10,7 @@ interface SidebarMediaHandlerProps {
 
 const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
   containers,
+  showSidebar,
 }) => {
   const [containerPairs, setContainerPairs] = useState<
     Map<HTMLElement, HTMLElement>
@@ -101,7 +103,7 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
 
   return (
     <div ref={sidebarRef}>
-      <MyST ast={containers} />
+      <VideoVolume ast={containers} />
     </div>
   );
 };
