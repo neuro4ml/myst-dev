@@ -2,6 +2,7 @@ import { GenericNode } from "myst-common";
 import { MyST } from "myst-to-react";
 import React, { useEffect, useRef, useState } from "react";
 import VideoVolume from "./VideoVolume";
+import SidebarMediaHandler from "./SidebarMediaHandler";
 
 interface SidebarMediaProps {
   showSidebar: boolean;
@@ -9,10 +10,8 @@ interface SidebarMediaProps {
 }
 
 const SidebarMedia: React.FC<SidebarMediaProps> = ({ showSidebar, containers }) => {
-  const sidebarRef = useRef<HTMLDivElement>(null);
   const [sidebarMedia, setSidebarMedia] = useState<GenericNode[]>([]);
   const [sidebarVideos, setSidebarVideos] = useState<GenericNode[]>([]);
-  const [containerPairs] = useState(new Map<HTMLElement, HTMLElement>());
 
   // Effect for processing containers and categorizing them
   useEffect(() => {
@@ -36,29 +35,7 @@ const SidebarMedia: React.FC<SidebarMediaProps> = ({ showSidebar, containers }) 
     setSidebarMedia(mediaArray);
     setSidebarVideos(videosArray);
 
-    // Process container pairs
-    containers.forEach((container) => {
-      const id = container.identifier;
-      
-      if (id) {
-        const element = document.getElementById(id);
-        if (element) {
-          if (sidebarRef.current && sidebarRef.current.contains(element)) {
-            element.id = id + "_COPY";
-            const originalElement = document.getElementById(id + "_ORIGINAL");
-            if (originalElement) { 
-              containerPairs.set(originalElement, element);
-            }
-          } else {
-            element.id = id + "_ORIGINAL";
-          }
-        }
-      }
-    });
-    
-    console.log([...containerPairs.entries()]);
-
-  }, [containers, containerPairs]); // Re-run when containers or containerPairs change
+  }, [containers]); // Re-run when containers or containerPairs change
 
   // Effect for handling visibility based on showSidebar
   useEffect(() => {
@@ -94,13 +71,13 @@ const SidebarMedia: React.FC<SidebarMediaProps> = ({ showSidebar, containers }) 
   }, [showSidebar, containers]); // Re-run when showSidebar or containers change
 
   return (
-    <section className={`${showSidebar ? 'w-4/12' : 'w-[0px]'} h-full flex flex-col border-l px-1`} ref={sidebarRef}>
+    <section className={`${showSidebar ? 'w-4/12' : 'w-[0px]'} h-full flex flex-col border-l px-1`} >
       <div className="pt-5"></div>
       <div className="pt-5"></div>
       <div className="pt-5"></div>
       <div className="flex-grow overflow-auto px-4">
         <div className="rightColumnText cursor-pointer hover:no-underline">
-          <MyST ast={sidebarMedia} />
+          <SidebarMediaHandler showSidebar={showSidebar} containers={sidebarMedia} />
         </div>
       </div>
       <div className="rightColumnMediaPlayer mt-auto px-4 py-2 flex flex-column">
