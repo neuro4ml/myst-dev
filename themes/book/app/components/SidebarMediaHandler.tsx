@@ -22,14 +22,13 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
     const newContainerPairs = new Map<HTMLElement, HTMLElement>();
 
     containers.forEach((container) => {
-      console.log(container);
       const id = container.identifier;
       
       if (id) {
         
         const element = document.getElementById(id);
         if (element) {
-          console.log(sidebarRef.current?.contains(element));
+          
           if (sidebarRef.current && sidebarRef.current.contains(element)) {
             element.id += "_COPY";
             const originalElement = document.getElementById(id + "_ORIGINAL");

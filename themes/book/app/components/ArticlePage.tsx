@@ -60,11 +60,22 @@ function combineDownloads(
   return pageFrontmatter.exports;
 }
 
-function deepCopyNode(node: GenericNode): GenericNode {
-  return {
-    ...node,
-    children: node.children ? node.children.map(child => deepCopyNode(child)) : undefined,
-  };
+function AddPlaybackAttributes({node}: {node: any}) {
+  let source = node.src;
+  console.log("SOurce: " + source);
+  if(source) {
+    if(source.indexOf("?") == -1) {
+      source += "?";
+    }
+    // if(source.indexOf("autoplay") == -1) {
+    //   source += "&autoplay=1";
+    // }
+    if(source.indexOf("controls") == -1) {
+      source += "&controls=0";
+    }
+  }
+  console.log("Source is now: " + source);
+  return(source);
 }
 
 const TOP_OFFSET = 33;
@@ -96,17 +107,23 @@ export const ArticlePage = React.memo(function ({
 
   const [showSidebar, setShowSidebar] = useState(true);
 
-  const sideBarTypes = 'container,proof,math';
-  const containers: GenericNode[] = [];
-  const videos: GenericNode[] = [];
+  const sidebarMediaTypes = 'container,proof,math';
+  const sidebarVideoTypes = 'iframe';
+  const sidebarMedia: GenericNode[] = [];
+  const sidebarVideos: GenericNode[] = [];
   let IDCount = 0;
-  visit(tree, (node, index, parent) => {
-    if (matches(sideBarTypes, node)) {
+  visit(tree, (node) => {
+    if (matches(sidebarMediaTypes, node)) {
       if(!node.identifier) {
         node.identifier = "alloc_node_" + IDCount++;
       } 
-      containers.push(node);
-  
+      sidebarMedia.push(node);
+      return SKIP;
+    }
+    else if (matches(sidebarVideoTypes, node)) {
+      node.src = AddPlaybackAttributes({node});
+      console.log(node.src);
+      sidebarVideos.push(node);
       return SKIP;
     }
   });
@@ -153,7 +170,7 @@ export const ArticlePage = React.memo(function ({
             </BusyScopeProvider>
           </ReferencesProvider>
         </main>
-        <SidebarMedia showSidebar={showSidebar} containers={containers} />
+        <SidebarMedia showSidebar={showSidebar} sidebarMedia={sidebarMedia} sidebarVideos={sidebarVideos}/>
       </div>
     </GridSystemProvider>
   );

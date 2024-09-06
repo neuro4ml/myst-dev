@@ -15,6 +15,7 @@ const SidebarVideoHandler: React.FC<SidebarVideoHandlerProps> = ({
   const [containerPairs, setContainerPairs] = useState<Map<HTMLElement, HTMLElement>>(new Map());
   const [firstElemIndex, setFirstElemIndex] = useState<number | null>(null);
   const [orderedVideoCopies, setOrderedVideoCopies] = useState<HTMLElement[]>([]);
+  const [idCount, setIdCount] = useState<number>(0);
 
   const sidebarRef = useRef<HTMLDivElement>(null);
 
@@ -22,33 +23,32 @@ const SidebarVideoHandler: React.FC<SidebarVideoHandlerProps> = ({
     const newContainerPairs = new Map<HTMLElement, HTMLElement>();
     const newOrderedVideoCopies: HTMLElement[] = []; // Create a new array instead of mutating state directly
 
-    containers.forEach((container) => {
-      const id = container.identifier;
-      
-      if (id) {
-        const element = document.getElementById(id);
-        if (element) {
-          if (sidebarRef.current && sidebarRef.current.contains(element)) {
-            element.id += "_COPY";
-            const originalElement = document.getElementById(id + "_ORIGINAL");
-            if (originalElement) {
-              newContainerPairs.set(originalElement, element);
-              newOrderedVideoCopies.push(element);
-            }
-          } else {
-            element.id += "_ORIGINAL";
-            const element2 = document.getElementById(id);
-            if (element2 && sidebarRef.current && sidebarRef.current.contains(element2)) {
-              element2.id += "_COPY";
-              const originalElement = document.getElementById(id + "_ORIGINAL");
-              if (originalElement) {
-                newContainerPairs.set(originalElement, element2);
-                newOrderedVideoCopies.push(element2);
-              }
-            }
-          }
+    const iframes = document.querySelectorAll('iframe');
+
+    iframes.forEach((iframe) => {
+      iframe.id = "iframe_node_" + idCount;
+      setIdCount(idCount + 1);
+      if (sidebarRef.current && sidebarRef.current.contains(iframe)) {
+        iframe.id += "_COPY";
+        const originalElement = document.getElementById(iframe.id + "_ORIGINAL");
+        if (originalElement) {
+          newContainerPairs.set(originalElement, iframe);
+          newOrderedVideoCopies.push(iframe);
+        }
+        iframe.style.position = 'relative';
+      } else {
+        iframe.id += "_ORIGINAL";
+        const copyElement = document.getElementById(iframe.id + "_COPY");
+        if (copyElement) {
+          newContainerPairs.set(iframe, copyElement);
+        }
+        iframe.style.visibility = 'hidden';
+        const topDiv = iframe.parentElement?.parentElement;
+        if (topDiv) {
+          topDiv.style.maxHeight = '0px';
         }
       }
+
     });
 
     setContainerPairs(newContainerPairs);
@@ -72,7 +72,7 @@ const SidebarVideoHandler: React.FC<SidebarVideoHandlerProps> = ({
 
               if (entry.isIntersecting && (updatedFirstElemIndex === null || currentIndex <= updatedFirstElemIndex)) {
                 copy.style.opacity = '1';
-                copy.style.position = 'static';
+                //copy.style.position = 'static';
                 copy.style.width = '';
                 copy.style.height = '';
                 copy.style.padding = '5px';
@@ -89,7 +89,7 @@ const SidebarVideoHandler: React.FC<SidebarVideoHandlerProps> = ({
                 updatedFirstElemIndex = currentIndex;
               } else {
                 copy.style.opacity = '0';
-                copy.style.position = 'absolute';
+                //copy.style.position = 'absolute';
                 copy.style.width = '0';
                 copy.style.height = '0';
 
