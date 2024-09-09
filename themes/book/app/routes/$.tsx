@@ -29,7 +29,6 @@ import {
 import { MadeWithMyst } from '@myst-theme/icons';
 import { ComputeOptionsProvider, ThebeLoaderAndServer } from '@myst-theme/jupyter';
 import { ArticlePage } from '../components/ArticlePage.js';
-import ContainerHider from '../components/ContainerHider.js';
 import type { TemplateOptions } from '../types.js';
 type ManifestProject = Required<SiteManifest>['projects'][0];
 
@@ -89,6 +88,12 @@ export function ArticlePageAndNavigation({
   return (
     <UiStateProvider>
       <TopNav />
+      <Navigation
+        tocRef={toc}
+        hide_toc={hide_toc}
+        footer={<MadeWithMyst />}
+        projectSlug={projectSlug}
+      />
       <TabStateProvider>
         <article ref={container} className="article content h-screen fixed" style={{ marginTop: top }}>
           {children}

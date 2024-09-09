@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import LineConnector from './LineConnector';
-import VidButtons from './VidButtons';
+import LineConnector from '../LineConnector';
+import VidButtons from '../VidButtons';
 
 const VidHider: React.FC = () => {
   const copyRefs = useRef<Map<string, HTMLElement>>(new Map());

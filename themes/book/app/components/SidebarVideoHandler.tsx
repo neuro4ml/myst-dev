@@ -2,7 +2,8 @@ import React, { useRef, useEffect, useState } from "react";
 import { GenericNode } from "myst-common";
 import { MyST } from "myst-to-react";
 import VidButtons from "./VidButtons";
-
+import hideContainerPairs from "./hideContainerPairs";
+import VideoHierarchy from "./VideoHierarchy";
 interface SidebarVideoHandlerProps {
   showSidebar: boolean;
   containers: GenericNode[];
@@ -13,118 +14,106 @@ const SidebarVideoHandler: React.FC<SidebarVideoHandlerProps> = ({
   showSidebar,
 }) => {
   const [containerPairs, setContainerPairs] = useState<Map<HTMLElement, HTMLElement>>(new Map());
-  const [firstElemIndex, setFirstElemIndex] = useState<number | null>(null);
-  const [orderedVideoCopies, setOrderedVideoCopies] = useState<HTMLElement[]>([]);
-  const [idCount, setIdCount] = useState<number>(0);
+  const [originalIdCount, setOriginalIdCount] = useState<number>(0);
+  const [copyIdCount, setCopyIdCount] = useState<number>(0);
+  const [videoCopyList, setvideoCopyList] = useState<HTMLElement[]>([]);
 
   const sidebarRef = useRef<HTMLDivElement>(null);
 
+  // const showTopVideo = () => {
+
+  //   let newTopVideoIndex = null;
+  //   let index = 0;
+  //   containerPairs.forEach((copy, original) => {
+  //     (newTopVideoIndex != null) ?
+  //     if(index <)
+  //     index++;
+  //   });
+  // };
+
   useEffect(() => {
-    const newContainerPairs = new Map<HTMLElement, HTMLElement>();
-    const newOrderedVideoCopies: HTMLElement[] = []; // Create a new array instead of mutating state directly
+    const newContainerPairs = containerPairs;
+    let currentCopyIdCount = copyIdCount;
+    let currentOriginalIdCount = originalIdCount;
+    let currentVideoCopyList = videoCopyList;
 
     const iframes = document.querySelectorAll('iframe');
 
     iframes.forEach((iframe) => {
-      iframe.id = "iframe_node_" + idCount;
-      setIdCount(idCount + 1);
+
       if (sidebarRef.current && sidebarRef.current.contains(iframe)) {
-        iframe.id += "_COPY";
-        const originalElement = document.getElementById(iframe.id + "_ORIGINAL");
+        
+        const id = "iframe_node_" + currentCopyIdCount++;
+
+        iframe.id = id + "_COPY";
+
+        currentVideoCopyList.push(iframe);
+
+        const originalElement = document.getElementById(id + "_ORIGINAL");
         if (originalElement) {
+          console.log("Matching original found!!!");
           newContainerPairs.set(originalElement, iframe);
-          newOrderedVideoCopies.push(iframe);
         }
+
         iframe.style.position = 'relative';
+
       } else {
-        iframe.id += "_ORIGINAL";
-        const copyElement = document.getElementById(iframe.id + "_COPY");
+
+        const id = "iframe_node_" + currentOriginalIdCount++;
+
+        iframe.id = id + "_ORIGINAL";
+
+        const copyElement = document.getElementById(id + "_COPY");
         if (copyElement) {
+          console.log("Matching copy found!!!");
           newContainerPairs.set(iframe, copyElement);
         }
+
         iframe.style.visibility = 'hidden';
+
         const topDiv = iframe.parentElement?.parentElement;
         if (topDiv) {
-          topDiv.style.maxHeight = '0px';
+          topDiv.style.marginBottom = `-${topDiv.offsetHeight}px`;
         }
       }
 
     });
 
+    console.log("New container pairs: ", newContainerPairs);
     setContainerPairs(newContainerPairs);
-    setOrderedVideoCopies(newOrderedVideoCopies); // Set state to the new array
+    setOriginalIdCount(currentOriginalIdCount);
+    setCopyIdCount(currentCopyIdCount);
+    setvideoCopyList(currentVideoCopyList);
 
   }, [containers, sidebarRef]);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        let updatedFirstElemIndex = firstElemIndex;
-
-        entries.forEach((entry) => {
-          const original = entry.target as HTMLElement;
-          if (containerPairs.has(original)) {
-            const copy = containerPairs.get(original);
-
-            if (copy) {
-              const currentIndex = orderedVideoCopies.indexOf(copy);
-              const videoElem = copy.firstElementChild;
-
-              if (entry.isIntersecting && (updatedFirstElemIndex === null || currentIndex <= updatedFirstElemIndex)) {
-                copy.style.opacity = '1';
-                //copy.style.position = 'static';
-                copy.style.width = '';
-                copy.style.height = '';
-                copy.style.padding = '5px';
-                copy.style.border = '2px solid grey';
-                copy.style.borderRadius = '5px';
-                copy.style.margin = '0';
-
-                if (videoElem instanceof HTMLVideoElement) {
-                  videoElem.play().catch(error => {
-                    console.error("Error playing video:", error);
-                  });
-                }
-
-                updatedFirstElemIndex = currentIndex;
-              } else {
-                copy.style.opacity = '0';
-                //copy.style.position = 'absolute';
-                copy.style.width = '0';
-                copy.style.height = '0';
-
-                if (videoElem instanceof HTMLVideoElement) {
-                  videoElem.pause();
-                }
-
-                if (currentIndex === updatedFirstElemIndex) {
-                  updatedFirstElemIndex = null;
-                }
-              }
-            }
-          }
-        });
-
-        if (updatedFirstElemIndex !== firstElemIndex) {
-          setFirstElemIndex(updatedFirstElemIndex);
+    console.log("VIDEO EFFECT LAUNCH");
+    containerPairs.forEach((copy, original) => {
+      const topDiv = original.parentElement?.parentElement;
+      if (showSidebar) {
+        console.log("HIDING:", original);
+        original.style.visibility = "hidden";
+        original.style.marginBottom = `-${original.offsetHeight}px`;
+        if (topDiv) {
+          topDiv.style.marginBottom = `-${topDiv.offsetHeight}px`;
         }
-      },
-      { threshold: 0.1 }
-    );
-
-    containerPairs.forEach((_, originalElement) => {
-      observer.observe(originalElement);
+      } else {
+        console.log("SHOWING:", original);
+        original.style.visibility = "visible";
+        original.style.marginBottom = `0px`;
+        if (topDiv) {
+          topDiv.style.marginBottom = `-0px`;
+        }
+      }
     });
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [containerPairs, firstElemIndex, orderedVideoCopies]); // Include firstElemIndex and orderedVideoCopies in the dependencies
+  }, [showSidebar, containerPairs]);
 
   return (
     <div className="flex flex-column" ref={sidebarRef}>
       <MyST ast={containers} />
-      {(firstElemIndex != null) && <VidButtons firstIndex={firstElemIndex} divElements={orderedVideoCopies}/>}
+      <VideoHierarchy containerPairs = {containerPairs} />
+      {/* {(firstElemIndex != null) && <VidButtons firstIndex={firstElemIndex} divElements={containerPairs.keys}/>} */}
     </div>
   );
 };

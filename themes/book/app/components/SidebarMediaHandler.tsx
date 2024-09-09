@@ -12,46 +12,59 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
   containers,
   showSidebar,
 }) => {
-  const [containerPairs, setContainerPairs] = useState<
-    Map<HTMLElement, HTMLElement>
-  >(new Map());
+  const [containerPairs, setContainerPairs] = useState<Map<HTMLElement, HTMLElement>>(new Map());
 
   const sidebarRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const newContainerPairs = new Map<HTMLElement, HTMLElement>();
-
+  const updateContainerPairs = () => {
+    const newContainerPairs = containerPairs;
     containers.forEach((container) => {
       const id = container.identifier;
-      
       if (id) {
-        
         const element = document.getElementById(id);
         if (element) {
-          
           if (sidebarRef.current && sidebarRef.current.contains(element)) {
             element.id += "_COPY";
             const originalElement = document.getElementById(id + "_ORIGINAL");
             if (originalElement) {
               newContainerPairs.set(originalElement, element);
+              originalElement.style.visibility = "hidden";
+              originalElement.style.marginBottom = `-${originalElement.offsetHeight}px`;
             }
           } else {
             element.id += "_ORIGINAL";
             const element2 = document.getElementById(id);
-            if ((element2 != null) && sidebarRef.current && sidebarRef.current.contains(element2)) {
+            if (element2 && sidebarRef.current && sidebarRef.current.contains(element2)) {
               element2.id += "_COPY";
               const originalElement = document.getElementById(id + "_ORIGINAL");
               if (originalElement) {
                 newContainerPairs.set(originalElement, element2);
+                originalElement.style.visibility = "hidden";
+                originalElement.style.marginBottom = `-${originalElement.offsetHeight}px`;
               }
             }
           }
         }
       }
     });
-
+  
+    //console.log("New Container Pairs:", newContainerPairs);
     setContainerPairs(newContainerPairs);
-  }, [containers, sidebarRef]);
+  };
+  
+  useEffect(updateContainerPairs, [containers]);
+
+  useEffect(() => {
+    containerPairs.forEach((copy, original) => {
+      if (showSidebar) {
+        original.style.visibility = "hidden";
+        original.style.marginBottom = `-${original.offsetHeight}px`;
+      } else {
+        original.style.visibility = "visible";
+        original.style.marginBottom = `0px`;
+      }
+    });
+  }, [showSidebar, containerPairs]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -102,7 +115,7 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
 
   return (
     <div ref={sidebarRef}>
-      <VideoVolume ast={containers} />
+      <MyST ast={containers} />
     </div>
   );
 };

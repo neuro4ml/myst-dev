@@ -36,9 +36,6 @@ import type { TemplateOptions } from '../types.js';
 import { matches } from 'unist-util-select';
 import { remove } from 'unist-util-remove';
 import { visit, SKIP } from 'unist-util-visit';
-import VideoVolume from './VideoVolume.js';
-import ContainerHider from './ContainerHider.js';
-import VidHider from './VidHider.js';
 import SidebarMedia from './SidebarMedia.js';
 import { MyST } from 'myst-to-react';
 
@@ -62,7 +59,6 @@ function combineDownloads(
 
 function AddPlaybackAttributes({node}: {node: any}) {
   let source = node.src;
-  console.log("SOurce: " + source);
   if(source) {
     if(source.indexOf("?") == -1) {
       source += "?";
@@ -74,7 +70,7 @@ function AddPlaybackAttributes({node}: {node: any}) {
       source += "&controls=0";
     }
   }
-  console.log("Source is now: " + source);
+  
   return(source);
 }
 
@@ -122,7 +118,6 @@ export const ArticlePage = React.memo(function ({
     }
     else if (matches(sidebarVideoTypes, node)) {
       node.src = AddPlaybackAttributes({node});
-      console.log(node.src);
       sidebarVideos.push(node);
       return SKIP;
     }
