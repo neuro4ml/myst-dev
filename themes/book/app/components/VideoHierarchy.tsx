@@ -1,16 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface VideoHierarchyProps {
   containerPairs: Map<HTMLElement, HTMLElement>;
 }
 
 const VideoHierarchy: React.FC<VideoHierarchyProps> = ({ containerPairs }) => {
+  const videoCopies: HTMLElement[] = Array.from(containerPairs.keys());
+  const [videoIndex, setVideoIndex] = useState<number | null>(null);
+
   useEffect(() => {
     // containerPairs.forEach((copy, original) => {
     //   if (copy.id !== "iframe_node_0_COPY") {
     //     copy.style.display = "none";
     //   }
     // });
+
+    let currentVideoIndex = videoIndex;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -20,7 +25,8 @@ const VideoHierarchy: React.FC<VideoHierarchyProps> = ({ containerPairs }) => {
             const copy = containerPairs.get(original);
 
             if (copy) {
-              if (entry.isIntersecting && (copy.id == ("iframe_node_0_COPY" || "iframe_node_1_COPY"))) {
+              const index = videoCopies.indexOf(copy);
+              if ((currentVideoIndex != null) ? ( entry.isIntersecting && (index <= currentVideoIndex)) : true) {
                 copy.style.transition = "all 0.3s ease-out";
                 copy.style.opacity = "1";
                 copy.style.position = "static";
@@ -32,6 +38,8 @@ const VideoHierarchy: React.FC<VideoHierarchyProps> = ({ containerPairs }) => {
                 copy.style.marginTop = "0.2em";
                 copy.style.marginBottom = "0.2em";
                 copy.style.transform = "scaleY(1)";
+
+                currentVideoIndex = index;
               } else {
                 copy.style.transition = "all 0s ease-in";
                 copy.style.opacity = "0";
@@ -39,6 +47,10 @@ const VideoHierarchy: React.FC<VideoHierarchyProps> = ({ containerPairs }) => {
                 copy.style.width = "0";
                 copy.style.height = "0";
                 copy.style.transform = "scaleY(0)";
+
+                if(index == currentVideoIndex) {
+                  currentVideoIndex = null;
+                }
               }
             }
           }
@@ -50,6 +62,8 @@ const VideoHierarchy: React.FC<VideoHierarchyProps> = ({ containerPairs }) => {
     containerPairs.forEach((copy, original) => {
       observer.observe(original);
     });
+
+    setVideoIndex(currentVideoIndex);
 
     return () => {
       observer.disconnect();

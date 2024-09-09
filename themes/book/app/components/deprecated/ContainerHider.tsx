@@ -1,7 +1,5 @@
 // ContainerHider.tsx
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import LineConnector from './LineConnector';
-import ImageModal from './ImageModal';
 
 interface LinePair {
   originalElement: HTMLElement;
@@ -124,14 +122,14 @@ const ContainerHider: React.FC = () => {
 
   return (
     <>
-      <LineConnector pairs={linePairs} />
+      {/* <LineConnector pairs={linePairs} />
       {modalImage && (
         <ImageModal
           src={modalImage.src}
           alt={modalImage.alt}
           onClose={closeModal}
         />
-      )}
+      )} */}
     </>
   );
 };
