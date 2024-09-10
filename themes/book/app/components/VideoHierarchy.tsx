@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
+import VidButtons from './VidButtons';
 
 interface VideoHierarchyProps {
   containerPairs: Map<HTMLElement, HTMLElement>;
 }
 
 const VideoHierarchy: React.FC<VideoHierarchyProps> = ({ containerPairs }) => {
-  const videoCopies: HTMLElement[] = Array.from(containerPairs.keys());
+  
   const [videoIndex, setVideoIndex] = useState<number | null>(null);
+  const [videoElements, setVideoElements] = useState<HTMLElement[]>([]);
 
   useEffect(() => {
-    // containerPairs.forEach((copy, original) => {
-    //   if (copy.id !== "iframe_node_0_COPY") {
-    //     copy.style.display = "none";
-    //   }
-    // });
+
+    const videoCopies: HTMLElement[] = Array.from(containerPairs.values());
+    const videoElements: HTMLElement[] = Array.from(containerPairs.keys());
+    setVideoElements(videoElements);
 
     let currentVideoIndex = videoIndex;
 
@@ -26,34 +27,47 @@ const VideoHierarchy: React.FC<VideoHierarchyProps> = ({ containerPairs }) => {
 
             if (copy) {
               const index = videoCopies.indexOf(copy);
-              if ((currentVideoIndex != null) ? ( entry.isIntersecting && (index <= currentVideoIndex)) : true) {
-                copy.style.transition = "all 0.3s ease-out";
-                copy.style.opacity = "1";
-                copy.style.position = "static";
-                copy.style.width = "";
-                copy.style.height = "";
-                copy.style.padding = "5px";
-                copy.style.border = "2px solid grey";
-                copy.style.borderRadius = "5px";
-                copy.style.marginTop = "0.2em";
-                copy.style.marginBottom = "0.2em";
-                copy.style.transform = "scaleY(1)";
+              
+              console.log("Index of: ", index, " and current is: ", currentVideoIndex);
+              if (index >= 0) {
+                console.log("CurrentVideoIndex != null?: ", currentVideoIndex != null);
+                console.log("entry.isIntersecting?: ", entry.isIntersecting);
+                if (currentVideoIndex != null) {
+                  console.log("index <= currentVideoIndex: ", index <= currentVideoIndex);
+                }
+                if ((currentVideoIndex != null) ? ( entry.isIntersecting && (index <= currentVideoIndex)) : true) {
+                  copy.style.transition = "all 0.3s ease-out";
+                  copy.style.opacity = "1";
+                  copy.style.position = "static";
+                  copy.style.width = "";
+                  copy.style.height = "";
+                  copy.style.padding = "5px";
+                  copy.style.border = "2px solid grey";
+                  copy.style.borderRadius = "5px";
+                  copy.style.marginTop = "0.2em";
+                  copy.style.marginBottom = "0.2em";
+                  copy.style.transform = "scaleY(1)";
 
-                currentVideoIndex = index;
-              } else {
-                copy.style.transition = "all 0s ease-in";
-                copy.style.opacity = "0";
-                copy.style.position = "absolute";
-                copy.style.width = "0";
-                copy.style.height = "0";
-                copy.style.transform = "scaleY(0)";
+                  console.log("Rewriting current: ", currentVideoIndex, " to: ", index);
 
-                if(index == currentVideoIndex) {
-                  currentVideoIndex = null;
+                  currentVideoIndex = index;
+                  
+                } else {
+                  copy.style.transition = "all 0s ease-in";
+                  copy.style.opacity = "0";
+                  copy.style.position = "absolute";
+                  copy.style.width = "0";
+                  copy.style.height = "0";
+                  copy.style.transform = "scaleY(0)";
+
+                  if(index == currentVideoIndex) {
+                    currentVideoIndex = null;
+                  }
                 }
               }
             }
           }
+          setVideoIndex(currentVideoIndex);
         });
       },
       { threshold: 0.1 }
@@ -63,14 +77,17 @@ const VideoHierarchy: React.FC<VideoHierarchyProps> = ({ containerPairs }) => {
       observer.observe(original);
     });
 
-    setVideoIndex(currentVideoIndex);
 
+
+    // Cleanup on unmount
     return () => {
       observer.disconnect();
     };
-  }, [containerPairs]);
+  }, [containerPairs, videoIndex]);
 
-  return null;
+  return (
+    <VidButtons firstIndex={videoIndex} divElements={videoElements}/>
+  );
 };
 
 export default VideoHierarchy;

@@ -4,6 +4,7 @@ import { MyST } from "myst-to-react";
 import VidButtons from "./VidButtons";
 import hideContainerPairs from "./hideContainerPairs";
 import VideoHierarchy from "./VideoHierarchy";
+import { FileChartColumnIncreasing } from "lucide-react";
 interface SidebarVideoHandlerProps {
   showSidebar: boolean;
   containers: GenericNode[];
@@ -71,9 +72,15 @@ const SidebarVideoHandler: React.FC<SidebarVideoHandlerProps> = ({
 
         iframe.style.visibility = 'hidden';
 
-        const topDiv = iframe.parentElement?.parentElement;
-        if (topDiv) {
-          topDiv.style.marginBottom = `-${topDiv.offsetHeight}px`;
+        const maxHeight = "80vh"
+
+        iframe.style.maxHeight = "80vh";
+        const topDiv = iframe.parentElement;
+        const topTopDiv = iframe.parentElement?.parentElement;
+        if (topDiv && topTopDiv) {
+          topTopDiv.style.marginBottom = `-${topDiv.offsetHeight}px`;
+          topTopDiv.style.maxHeight = '80vh';
+          //topDiv.style.all = 'unset';
         }
       }
 

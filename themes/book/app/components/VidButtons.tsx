@@ -9,9 +9,10 @@ interface VidButtonsProps {
 const VidButtons: React.FC<VidButtonsProps> = ({ firstIndex, divElements }) => {
 
   const scrollToElement = (index: number) => {
-    if (divElements[index]) {
-      console.log(`Scrolling to element ${divElements[index]} at index ${index}...`);
-      divElements[index]?.scrollIntoView({
+    const element = divElements[index]
+    if (element) {
+      console.log("Scrolling to element ", element, " at index ", index, "...");
+      element.scrollIntoView({
         behavior: 'smooth',
         block: 'start',
       });
