@@ -1,5 +1,18 @@
 # @myst-theme/site
 
+## 0.9.11
+
+### Patch Changes
+
+- Updated dependencies [0584409]
+  - @myst-theme/frontmatter@0.9.11
+  - @myst-theme/providers@0.9.11
+  - @myst-theme/diagrams@0.9.11
+  - @myst-theme/jupyter@0.9.11
+  - @myst-theme/common@0.9.11
+  - myst-to-react@0.9.11
+  - myst-demo@0.9.11
+
 ## 0.9.10
 
 ### Patch Changes
