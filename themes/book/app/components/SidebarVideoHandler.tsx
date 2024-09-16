@@ -1,10 +1,10 @@
 import React, { useRef, useEffect, useState } from "react";
 import { GenericNode } from "myst-common";
 import { MyST } from "myst-to-react";
-import VidButtons from "./VidButtons";
-import hideContainerPairs from "./hideContainerPairs";
+
 import VideoHierarchy from "./VideoHierarchy";
 import { FileChartColumnIncreasing } from "lucide-react";
+import LineConnector from "./LineConnector";
 interface SidebarVideoHandlerProps {
   showSidebar: boolean;
   containers: GenericNode[];
@@ -42,6 +42,10 @@ const SidebarVideoHandler: React.FC<SidebarVideoHandlerProps> = ({
 
     iframes.forEach((iframe) => {
 
+      const topDiv = iframe.parentElement;
+      const topTopDiv = iframe.parentElement?.parentElement;
+      const topTopTopDiv = iframe.parentElement?.parentElement?.parentElement;
+
       if (sidebarRef.current && sidebarRef.current.contains(iframe)) {
         
         const id = "iframe_node_" + currentCopyIdCount++;
@@ -56,7 +60,18 @@ const SidebarVideoHandler: React.FC<SidebarVideoHandlerProps> = ({
           newContainerPairs.set(originalElement, iframe);
         }
 
-        iframe.style.position = 'relative';
+        if (topDiv && topTopDiv) {
+          topDiv.replaceWith(iframe);
+          topTopDiv.style.position = "relative";
+          topTopDiv.style.overflow = "hidden";
+          topTopDiv.style.width = "100%";
+          topTopDiv.style.maxWidth = "100%";
+          topTopDiv.style.justifyContent = "right";
+        }
+
+        if (topTopTopDiv) {
+          topTopTopDiv.style.minHeight = "25%";
+        }
 
       } else {
 
@@ -75,12 +90,13 @@ const SidebarVideoHandler: React.FC<SidebarVideoHandlerProps> = ({
         const maxHeight = "80vh"
 
         iframe.style.maxHeight = "80vh";
-        const topDiv = iframe.parentElement;
-        const topTopDiv = iframe.parentElement?.parentElement;
+        
+        console.log(topDiv);
+        console.log(topTopDiv);
         if (topDiv && topTopDiv) {
-          topTopDiv.style.marginBottom = `-${topDiv.offsetHeight}px`;
-          topTopDiv.style.maxHeight = '80vh';
-          //topDiv.style.all = 'unset';
+          topTopDiv.style.height = "1px";
+          topTopDiv.style.overflow = "hidden";
+
         }
       }
 
@@ -95,23 +111,13 @@ const SidebarVideoHandler: React.FC<SidebarVideoHandlerProps> = ({
   }, [containers, sidebarRef]);
 
   useEffect(() => {
-    console.log("VIDEO EFFECT LAUNCH");
     containerPairs.forEach((copy, original) => {
       const topDiv = original.parentElement?.parentElement;
       if (showSidebar) {
-        console.log("HIDING:", original);
-        original.style.visibility = "hidden";
-        original.style.marginBottom = `-${original.offsetHeight}px`;
-        if (topDiv) {
-          topDiv.style.marginBottom = `-${topDiv.offsetHeight}px`;
-        }
+        original.style.height = "1px";
+        original.style.overflow = "hidden";
       } else {
-        console.log("SHOWING:", original);
-        original.style.visibility = "visible";
-        original.style.marginBottom = `0px`;
-        if (topDiv) {
-          topDiv.style.marginBottom = `-0px`;
-        }
+        original.style.height = "initial";
       }
     });
   }, [showSidebar, containerPairs]);
@@ -120,7 +126,8 @@ const SidebarVideoHandler: React.FC<SidebarVideoHandlerProps> = ({
     <div className="flex flex-column" ref={sidebarRef}>
       <MyST ast={containers} />
       <VideoHierarchy containerPairs = {containerPairs} />
-      {/* {(firstElemIndex != null) && <VidButtons firstIndex={firstElemIndex} divElements={containerPairs.keys}/>} */}
+      <LineConnector containerPairs={containerPairs} />
+
     </div>
   );
 };

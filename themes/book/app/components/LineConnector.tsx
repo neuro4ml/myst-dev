@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 
 interface LineConnectorProps {
-  pairs: { originalElement: HTMLElement; copyElement: HTMLElement }[];
+   containerPairs: Map<HTMLElement, HTMLElement>;
 }
 
-const LineConnector: React.FC<LineConnectorProps> = ({ pairs }) => {
+const LineConnector: React.FC<LineConnectorProps> = ({ containerPairs }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animationFrameRef = useRef<number | null>(null);
 
@@ -24,7 +24,7 @@ const LineConnector: React.FC<LineConnectorProps> = ({ pairs }) => {
     // Clear canvas before drawing
     context.clearRect(0, 0, canvas.width, canvas.height);
 
-    pairs.forEach(({ originalElement, copyElement }) => {
+    containerPairs.forEach((copy, original) => {
 
       
       const figures = document.querySelectorAll('figure');
@@ -32,16 +32,16 @@ const LineConnector: React.FC<LineConnectorProps> = ({ pairs }) => {
     
       for (const figure of figures) {
         if (figure.matches(':hover')) {
-          if (figure === copyElement) {
+          if (figure === copy) {
             hovering = true;
             break;
           }
         }
       }
 
-      if (originalElement && copyElement && hovering) {
-        const originalRect = originalElement.getBoundingClientRect();
-        const copyRect = copyElement.getBoundingClientRect();
+      if (original && copy && hovering) {
+        const originalRect = original.getBoundingClientRect();
+        const copyRect = copy.getBoundingClientRect();
 
         // Calculate positions relative to the document, not the viewport
         
@@ -67,7 +67,7 @@ const LineConnector: React.FC<LineConnectorProps> = ({ pairs }) => {
         context.stroke();
       }
     });
-  }, [pairs]);
+  }, [containerPairs]);
 
   const animateLines = useCallback(() => {
     drawLines();

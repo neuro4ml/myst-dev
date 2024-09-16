@@ -27,38 +27,37 @@ const VideoHierarchy: React.FC<VideoHierarchyProps> = ({ containerPairs }) => {
 
             if (copy) {
               const index = videoCopies.indexOf(copy);
-              
-              console.log("Index of: ", index, " and current is: ", currentVideoIndex);
+
               if (index >= 0) {
-                console.log("CurrentVideoIndex != null?: ", currentVideoIndex != null);
-                console.log("entry.isIntersecting?: ", entry.isIntersecting);
-                if (currentVideoIndex != null) {
-                  console.log("index <= currentVideoIndex: ", index <= currentVideoIndex);
-                }
-                if ((currentVideoIndex != null) ? ( entry.isIntersecting && (index <= currentVideoIndex)) : true) {
-                  copy.style.transition = "all 0.3s ease-out";
-                  copy.style.opacity = "1";
-                  copy.style.position = "static";
-                  copy.style.width = "";
-                  copy.style.height = "";
-                  copy.style.padding = "5px";
-                  copy.style.border = "2px solid grey";
-                  copy.style.borderRadius = "5px";
-                  copy.style.marginTop = "0.2em";
-                  copy.style.marginBottom = "0.2em";
-                  copy.style.transform = "scaleY(1)";
+                if (entry.isIntersecting) {
+                  if ((currentVideoIndex != null) ? (index <= currentVideoIndex) : true) {
+                    // copy.style.transition = "all 0.3s ease-out";
+                    // copy.style.opacity = "1";
+                    // copy.style.position = "absolute";
+                    // copy.style.width = "100%";
+                    // copy.style.height = "auto";
+                    // copy.style.padding = "5px";
+                    // copy.style.border = "2px solid grey";
+                    // copy.style.borderRadius = "5px";
+                    // copy.style.marginTop = "0.2em";
+                    // copy.style.marginBottom = "0.2em";
+                    // copy.style.transform = "scaleY(1)";
+                    copy.style.visibility = "visible";
+                    copy.style.boxSizing = "border-box";
+                    copy.style.position = "absolute";
+                    copy.style.height = "100%";
 
-                  console.log("Rewriting current: ", currentVideoIndex, " to: ", index);
-
-                  currentVideoIndex = index;
-                  
+                    currentVideoIndex = index;
+                    
+                  } 
                 } else {
-                  copy.style.transition = "all 0s ease-in";
-                  copy.style.opacity = "0";
-                  copy.style.position = "absolute";
-                  copy.style.width = "0";
-                  copy.style.height = "0";
-                  copy.style.transform = "scaleY(0)";
+                  // copy.style.transition = "all 0s ease-in";
+                  // copy.style.opacity = "0";
+                  // copy.style.position = "absolute";
+                  // copy.style.width = "";
+                  // copy.style.height = "";
+                  // copy.style.transform = "scaleY(0)";
+                  copy.style.visibility = "hidden";
 
                   if(index == currentVideoIndex) {
                     currentVideoIndex = null;
@@ -86,7 +85,7 @@ const VideoHierarchy: React.FC<VideoHierarchyProps> = ({ containerPairs }) => {
   }, [containerPairs, videoIndex]);
 
   return (
-    <VidButtons firstIndex={videoIndex} divElements={videoElements}/>
+    (videoIndex != null) ? (<VidButtons firstIndex={videoIndex} divElements={videoElements}/>) : null
   );
 };
 
