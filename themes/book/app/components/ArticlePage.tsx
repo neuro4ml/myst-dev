@@ -38,6 +38,7 @@ import { remove } from 'unist-util-remove';
 import { visit, SKIP } from 'unist-util-visit';
 import SidebarMedia from './SidebarMedia.js';
 import { MyST } from 'myst-to-react';
+import Split from 'react-split';
 
 
 /**
@@ -127,45 +128,47 @@ export const ArticlePage = React.memo(function ({
   return (
     <GridSystemProvider gridSystem={gridChoice}>
       <div className="flex flex-row h-screen">
-        <main className={`${showSidebar ? 'w-8/12' : 'w-full visible'} h-full px-4 overflow-auto`}>
-          <ReferencesProvider
-            references={{ ...article.references, article: article.mdast }}
-            frontmatter={article.frontmatter}
-          >
-            <BusyScopeProvider>
-              <ExecuteScopeProvider enable={compute?.enabled ?? false} contents={article}>
-                {!hide_title_block && (
-                  <FrontmatterBlock
-                    kind={article.kind}
-                    frontmatter={{ ...article.frontmatter, downloads }}
-                    className="pt-5 mb-8"
-                    authorStyle="list"
-                  />
-                )}
-                {compute?.enabled &&
-                  compute.features.notebookCompute &&
-                  article.kind === SourceFileKind.Notebook && <NotebookToolbar showLaunch />}
-                {compute?.enabled && article.kind === SourceFileKind.Article && (
-                  <ErrorTray pageSlug={article.slug} />
-                )}
-                <div id="skip-to-article" />
-                <FrontmatterParts parts={parts} keywords={keywords} hideKeywords={hideKeywords} />
-                <button onClick={() => setShowSidebar(!showSidebar)}>
-                  Toggle Sidebar
-                </button>
-                <ContentBlocks pageKind={article.kind} mdast={tree as GenericParent} />
-                <BackmatterParts parts={parts} />
-                <Footnotes />
-                <Bibliography />
-                <ConnectionStatusTray />
-                {!hide_footer_links && !hide_all_footer_links && (
-                  <FooterLinksBlock links={article.footer} />
-                )}
-              </ExecuteScopeProvider>
-            </BusyScopeProvider>
-          </ReferencesProvider>
-        </main>
-        <SidebarMedia showSidebar={showSidebar} sidebarMedia={sidebarMedia} sidebarVideos={sidebarVideos}/>
+        <Split className="flex flex-row">
+          <main className={`${showSidebar ? 'w-8/12' : 'w-full visible'} h-full px-4 overflow-auto`}>
+            <ReferencesProvider
+              references={{ ...article.references, article: article.mdast }}
+              frontmatter={article.frontmatter}
+            >
+              <BusyScopeProvider>
+                <ExecuteScopeProvider enable={compute?.enabled ?? false} contents={article}>
+                  {!hide_title_block && (
+                    <FrontmatterBlock
+                      kind={article.kind}
+                      frontmatter={{ ...article.frontmatter, downloads }}
+                      className="pt-5 mb-8"
+                      authorStyle="list"
+                    />
+                  )}
+                  {compute?.enabled &&
+                    compute.features.notebookCompute &&
+                    article.kind === SourceFileKind.Notebook && <NotebookToolbar showLaunch />}
+                  {compute?.enabled && article.kind === SourceFileKind.Article && (
+                    <ErrorTray pageSlug={article.slug} />
+                  )}
+                  <div id="skip-to-article" />
+                  <FrontmatterParts parts={parts} keywords={keywords} hideKeywords={hideKeywords} />
+                  <button onClick={() => setShowSidebar(!showSidebar)}>
+                    Toggle Sidebar
+                  </button>
+                  <ContentBlocks pageKind={article.kind} mdast={tree as GenericParent} />
+                  <BackmatterParts parts={parts} />
+                  <Footnotes />
+                  <Bibliography />
+                  <ConnectionStatusTray />
+                  {!hide_footer_links && !hide_all_footer_links && (
+                    <FooterLinksBlock links={article.footer} />
+                  )}
+                </ExecuteScopeProvider>
+              </BusyScopeProvider>
+            </ReferencesProvider>
+          </main>
+          <SidebarMedia showSidebar={showSidebar} sidebarMedia={sidebarMedia} sidebarVideos={sidebarVideos}/>
+        </Split>
       </div>
     </GridSystemProvider>
   );

@@ -4,9 +4,10 @@ import { ArrowUpToLine, ArrowDownToLine } from 'lucide-react';
 interface VidButtonsProps {
   firstIndex: number | null;
   divElements: HTMLElement[];
+  setVideoIndex: (index: number | null) => void;
 }
 
-const VidButtons: React.FC<VidButtonsProps> = ({ firstIndex, divElements }) => {
+const VidButtons: React.FC<VidButtonsProps> = ({ firstIndex, divElements, setVideoIndex }) => {
 
   const allowCyclicButtons = false;
 
@@ -15,15 +16,18 @@ const VidButtons: React.FC<VidButtonsProps> = ({ firstIndex, divElements }) => {
   
     if (element) {
       console.log("Scrolling to element ", element, " at index ", index, "...");
-
-      const scrollableParent = element.parentElement?.parentElement?.parentElement?.parentElement as HTMLElement;
+  
+      const scrollableParent = document.querySelector('main') as HTMLElement;
   
       if (scrollableParent) {
-        console.log("Scroll PArent: ", scrollableParent);
-
+        console.log("Scrollable Parent: ", scrollableParent);
+  
+        const isScrolledToBottom = scrollableParent.scrollTop + scrollableParent.clientHeight >= scrollableParent.scrollHeight;
+        console.log("Is scrolled to bottom: ", isScrolledToBottom);
+  
         const elementRect = element.getBoundingClientRect();
         const parentRect = scrollableParent.getBoundingClientRect();
-
+  
         const offsetTop = elementRect.top - parentRect.top;
   
         const offset = 10;
@@ -32,9 +36,16 @@ const VidButtons: React.FC<VidButtonsProps> = ({ firstIndex, divElements }) => {
           top: scrollableParent.scrollTop + offsetTop - offset,
           behavior: 'smooth',
         });
+  
+        if (isScrolledToBottom) {
+          console.log("Reached the bottom of the scrollable parent.");
+        }
+
+        setVideoIndex(index);
       }
     }
   };
+  
   
   
   const handleUpClick = () => {
@@ -64,7 +75,7 @@ const VidButtons: React.FC<VidButtonsProps> = ({ firstIndex, divElements }) => {
           null
         }
         <div className="flex items-center justify-center text-xl text-white font-semibold bg-blue-500 rounded-full p-1">
-          {(firstIndex != null) ? (firstIndex + 1) : (null)}
+          {(firstIndex != null) ? (firstIndex + 1) + "/" + (divElements.length) : (null)}
         </div>
         {(firstIndex != null) ? 
           ( (divElements[firstIndex + 1] || allowCyclicButtons) &&
