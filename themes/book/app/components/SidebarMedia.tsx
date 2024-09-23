@@ -1,7 +1,6 @@
 import { GenericNode } from "myst-common";
 import { MyST } from "myst-to-react";
 import React, { useEffect, useRef, useState } from "react";
-import VideoVolume from "./deprecated/VideoVolume";
 import SidebarMediaHandler from "./SidebarMediaHandler";
 import SidebarVideoHandler from "./SidebarVideoHandler";
 
