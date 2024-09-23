@@ -30,17 +30,21 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
   }, []);
 
   const styleCopy = (copy: HTMLElement) => {
-    // Set flex-related properties for responsive layout
-    copy.style.maxHeight = "100%";
-    copy.style.minWidth = "18vw";
-    copy.style.flex = "1 1 calc(33.333% - 10px)"; // Adjust flex basis for responsiveness
-    copy.style.margin = "5px"; // Margin between items
-    copy.style.objectFit = "cover";
-    copy.style.verticalAlign = "bottom";
-    copy.style.transition = "all 0.3s ease-out"; // For smooth transitions
+    copy.style.transition = "all 0.3s ease-out"; // Smooth transition for scaling and resizing
+    copy.style.padding = "3px";
+    copy.style.border = "1px solid";
+    copy.style.position = "relative";
+  
+    // Allow flex-grow to be adjusted dynamically based on the focus
+    copy.style.flexGrow = "0"; // Initial value, dynamically updated in updateCopyStyles
+    copy.style.flexShrink = "1"; // Allow shrinking if needed
+    copy.style.flexBasis = "auto"; // Let content define the size initially
   };
+  
+  
 
   const sidebarRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLElement | null>(null); // Reference for the main element
 
   const updateContainerPairs = () => {
     const newContainerPairs = containerPairs;
@@ -74,6 +78,46 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
   
     setContainerPairs(newContainerPairs);
   };
+
+  const updateCopyStyles = () => {
+    const viewportHeight = mainRef.current?.clientHeight || window.innerHeight;
+    const centerY = viewportHeight / 2;
+  
+    containerPairs.forEach((copy, original) => {
+      const rect = original.getBoundingClientRect();
+      const originalCenterY = rect.top + rect.height / 2;
+      const distanceFromCenter = Math.abs(centerY - originalCenterY);
+      const maxDistance = viewportHeight / 2;
+  
+      let scale = Math.sin(0.5 * Math.PI * Math.max(0, 1 - distanceFromCenter / maxDistance));
+
+      if (rect.bottom < 0 || rect.top > viewportHeight) {
+        scale = 0;
+      }
+
+      // Apply scale to width and height
+      copy.style.width = `${scale * 100}%`;
+      copy.style.height = `${scale * 100}%`;
+
+      // Adjust other properties based on scale
+      copy.style.transform = `scale(${scale})`;
+
+      // Adjust z-index based on visibility
+      if (scale > 0) {
+        copy.style.zIndex = "0";
+        copy.style.display = "block";
+      } else {
+        copy.style.zIndex = "-10";
+        copy.style.display = "none";
+      }
+
+      // Optional: add transition for smooth scaling
+      copy.style.transition = 'all 0.3s ease-out';
+    });
+  };
+
+
+  
   
   useEffect(updateContainerPairs, [containers]);
 
@@ -89,52 +133,30 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
   }, [showSidebar, containerPairs]);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const original = entry.target as HTMLElement;
-          if (containerPairs.has(original)) {
-            const copy = containerPairs.get(original);
+    mainRef.current = document.querySelector('main'); // Select the main element
 
-            if (copy) {
-              if (entry.isIntersecting) {
-                // When the copy becomes visible
-                copy.style.opacity = "1";
-                copy.style.position = "relative";
-                copy.style.transform = "scale(1)";
-                copy.style.zIndex = "0";
-                copy.onclick = () => {
-                  const img = copy.querySelector('img');
-                  if (img) {
-                    openModal(img.src, img.alt);
-                  }
-                };
-              } else {
-                // When the copy is out of view
-                copy.style.opacity = "0";
-                copy.style.position = "absolute";
-                copy.style.transform = "scale(0.8)";
-                copy.style.zIndex = "-10";
-                copy.onclick = null;
-              }
-            }
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
+    const handleScroll = () => {
+      console.log("Scroll event triggered on main");
+      updateCopyStyles();
+    };
 
-    containerPairs.forEach((_, originalElement) => {
-      observer.observe(originalElement);
-    });
+    if (mainRef.current) {
+      mainRef.current.addEventListener('scroll', handleScroll);
+      mainRef.current.addEventListener('resize', updateCopyStyles);
+    }
+
+    updateCopyStyles(); // Initial call to set styles
 
     return () => {
-      observer.disconnect();
+      if (mainRef.current) {
+        mainRef.current.removeEventListener('scroll', handleScroll);
+        mainRef.current.removeEventListener('resize', updateCopyStyles);
+      }
     };
-  }, [containerPairs, openModal]);
+  }, [containerPairs]);
 
   return (
-    <div className="flex flex-wrap justify-start" ref={sidebarRef} style={{ gap: "10px" }}>
+    <div className="flex flex-wrap flex-row" ref={sidebarRef} style={{maxHeight: "1000px", alignItems: "center"}}>
       <MyST ast={containers} />
       <LineConnector containerPairs={containerPairs} />
       {modalImage && (
