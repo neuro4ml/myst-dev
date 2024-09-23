@@ -3,6 +3,7 @@ import { GenericNode } from "myst-common";
 import { MyST } from "myst-to-react";
 import LineConnector from "./LineConnector";
 import ImageModal from "./ImageModal";
+
 interface SidebarMediaHandlerProps {
   showSidebar: boolean;
   containers: GenericNode[];
@@ -28,6 +29,17 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
     setModalImage(null);
   }, []);
 
+  const styleCopy = (copy: HTMLElement) => {
+    // Set flex-related properties for responsive layout
+    copy.style.maxHeight = "100%";
+    copy.style.minWidth = "18vw";
+    copy.style.flex = "1 1 calc(33.333% - 10px)"; // Adjust flex basis for responsiveness
+    copy.style.margin = "5px"; // Margin between items
+    copy.style.objectFit = "cover";
+    copy.style.verticalAlign = "bottom";
+    copy.style.transition = "all 0.3s ease-out"; // For smooth transitions
+  };
+
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   const updateContainerPairs = () => {
@@ -39,6 +51,7 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
         if (element) {
           if (sidebarRef.current && sidebarRef.current.contains(element)) {
             element.id += "_COPY";
+            styleCopy(element);
             const originalElement = document.getElementById(id + "_ORIGINAL");
             if (originalElement) {
               newContainerPairs.set(originalElement, element);
@@ -48,6 +61,7 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
             const element2 = document.getElementById(id);
             if (element2 && sidebarRef.current && sidebarRef.current.contains(element2)) {
               element2.id += "_COPY";
+              styleCopy(element2);
               const originalElement = document.getElementById(id + "_ORIGINAL");
               if (originalElement) {
                 newContainerPairs.set(originalElement, element2);
@@ -58,7 +72,6 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
       }
     });
   
-    //console.log("New Container Pairs:", newContainerPairs);
     setContainerPairs(newContainerPairs);
   };
   
@@ -66,7 +79,6 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
 
   useEffect(() => {
     containerPairs.forEach((copy, original) => {
-      console.log("ORiginal: ", original);
       if (showSidebar) {
         original.style.height = "0";
         original.style.overflow = "hidden";
@@ -86,18 +98,11 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
 
             if (copy) {
               if (entry.isIntersecting) {
-                copy.style.transition = "all 0.3s ease-out";
+                // When the copy becomes visible
                 copy.style.opacity = "1";
-                copy.style.position = "static";
-                copy.style.width = "";
-                copy.style.height = "";
-                copy.style.padding = "5px";
-                copy.style.border = "2px solid grey";
-                copy.style.borderRadius = "5px";
-                copy.style.marginTop = "0.2em";
-                copy.style.marginBottom = "0.2em";
-                copy.style.transform = "scaleY(1)";
-
+                copy.style.position = "relative";
+                copy.style.transform = "scale(1)";
+                copy.style.zIndex = "0";
                 copy.onclick = () => {
                   const img = copy.querySelector('img');
                   if (img) {
@@ -105,13 +110,11 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
                   }
                 };
               } else {
-                copy.style.transition = "all 0s ease-in";
+                // When the copy is out of view
                 copy.style.opacity = "0";
                 copy.style.position = "absolute";
-                copy.style.width = "0";
-                copy.style.height = "0";
-                copy.style.transform = "scaleY(0)";
-
+                copy.style.transform = "scale(0.8)";
+                copy.style.zIndex = "-10";
                 copy.onclick = null;
               }
             }
@@ -121,19 +124,17 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
       { threshold: 0.1 }
     );
 
-    // Observing all original elements
     containerPairs.forEach((_, originalElement) => {
       observer.observe(originalElement);
     });
 
-    // Cleanup on unmount or when containerPairs changes
     return () => {
       observer.disconnect();
     };
-  }, [containerPairs, openModal]); // Depend on containerPairs to rerun the effect
+  }, [containerPairs, openModal]);
 
   return (
-    <div ref={sidebarRef}>
+    <div className="flex flex-wrap justify-start" ref={sidebarRef} style={{ gap: "10px" }}>
       <MyST ast={containers} />
       <LineConnector containerPairs={containerPairs} />
       {modalImage && (

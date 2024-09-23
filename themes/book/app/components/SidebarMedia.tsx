@@ -71,7 +71,7 @@ const SidebarMedia: React.FC<SidebarMediaProps> = ({ showSidebar, sidebarMedia, 
   //}, [showSidebar, sidebarMedia, sidebarVideos]); // Re-run when showSidebar or containers change
 
   return (
-    <section className={`${showSidebar ? 'w-4/12' : 'w-[0px]'} h-full flex flex-col border-l px-1`} >
+    <section className={"h-full flex flex-col border-l px-1"} >
       <div className="pt-5"></div>
       <div className="pt-5"></div>
       <div className="pt-5"></div>

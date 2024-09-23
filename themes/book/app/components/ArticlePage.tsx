@@ -70,6 +70,9 @@ function AddPlaybackAttributes({node}: {node: any}) {
     if(source.indexOf("controls") == -1) {
       source += "&controls=0";
     }
+    if(source.indexOf("enablejsapi") == -1) {
+      source += "&enablejsapi=1";
+    }
   }
   
   return(source);
@@ -104,6 +107,13 @@ export const ArticlePage = React.memo(function ({
 
   const [showSidebar, setShowSidebar] = useState(true);
 
+  const [sizes, setSizes] = useState(showSidebar ? [70, 30] : [100, 0]);
+
+  const toggleSidebar = () => {
+    setShowSidebar((prev) => !prev);
+    setSizes(showSidebar ? [100, 0] : [70, 30]);
+  };
+
   const sidebarMediaTypes = 'container,proof,math';
   const sidebarVideoTypes = 'iframe';
   const sidebarMedia: GenericNode[] = [];
@@ -128,8 +138,14 @@ export const ArticlePage = React.memo(function ({
   return (
     <GridSystemProvider gridSystem={gridChoice}>
       <div className="flex flex-row h-screen">
-        <Split className="flex flex-row">
-          <main className={`${showSidebar ? 'w-8/12' : 'w-full visible'} h-full px-4 overflow-auto`}>
+        <Split
+          className="flex flex-row"
+          sizes={showSidebar ? sizes : [100, 0]}
+          minSize={[500, 0]}
+          gutterSize={10}
+          onDrag={(newSizes) => setSizes(newSizes)}
+        >
+          <main className={"h-full px-4 overflow-auto"}>
             <ReferencesProvider
               references={{ ...article.references, article: article.mdast }}
               frontmatter={article.frontmatter}
@@ -167,9 +183,11 @@ export const ArticlePage = React.memo(function ({
               </BusyScopeProvider>
             </ReferencesProvider>
           </main>
-          <SidebarMedia showSidebar={showSidebar} sidebarMedia={sidebarMedia} sidebarVideos={sidebarVideos}/>
+          <div style={{ display: showSidebar ? 'block' : 'none', width: showSidebar ? 'auto' : '0' }}>
+            <SidebarMedia showSidebar={showSidebar} sidebarMedia={sidebarMedia} sidebarVideos={sidebarVideos} />
+          </div>
         </Split>
       </div>
     </GridSystemProvider>
-  );
+  );  
 });

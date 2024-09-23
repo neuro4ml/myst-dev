@@ -1,7 +1,6 @@
 .PHONY: build-theme build-article build-book deploy-theme deploy-article deploy-book check
 
 COMMIT = $(shell git rev-parse --short HEAD)
-# You may need to install jq for this to work!
 VERSION = $(shell cat packages/site/package.json | jq -r '.version')
 
 THEME=article
@@ -12,7 +11,8 @@ check:
 build-theme:
 	mkdir .deploy || true
 	rm -rf .deploy/$(THEME)
-	git clone --depth 1 https://github.com/myst-templates/$(THEME)-theme .deploy/$(THEME)
+	# Clone the new repo for the built theme
+	git clone --depth 1 https://github.com/jfgavin/myst-splitscreen-theme .deploy/$(THEME)
 	rm -rf .deploy/$(THEME)/public .deploy/$(THEME)/build .deploy/$(THEME)/package.json .deploy/$(THEME)/package-lock.json .deploy/$(THEME)/template.yml .deploy/$(THEME)/server.js
 	find template -type f  -exec cp {} .deploy/$(THEME) \;
 	cd themes/$(THEME) && npm run prod:build
@@ -31,7 +31,7 @@ build-book:
 	make THEME=book build-theme
 
 deploy-theme: check
-	echo "Deploying $(THEME) theme to myst-templates/$(THEME)-theme"
+	echo "Deploying $(THEME) theme to neuro4ml/myst-article-theme"
 	echo "Version: $(VERSION)"
 	make THEME=$(THEME) build-theme
 	cd .deploy/$(THEME) && git add .

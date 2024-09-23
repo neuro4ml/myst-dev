@@ -87,15 +87,14 @@ const SidebarVideoHandler: React.FC<SidebarVideoHandlerProps> = ({
 
         iframe.style.visibility = 'hidden';
 
-        const maxHeight = "80vh"
-
-        iframe.style.maxHeight = "80vh";
+        iframe.style.height = "1px";
         
         console.log(topDiv);
         console.log(topTopDiv);
         if (topDiv && topTopDiv) {
-          topTopDiv.style.height = "1px";
-          topTopDiv.style.overflow = "hidden";
+          // topTopDiv.style.height = "1px";
+          // topTopDiv.style.overflow = "hidden";
+          topDiv.style.paddingBottom = "";
 
         }
       }
