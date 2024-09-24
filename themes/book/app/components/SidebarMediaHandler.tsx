@@ -30,18 +30,13 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
   }, []);
 
   const styleCopy = (copy: HTMLElement) => {
-    copy.style.transition = "all 0.3s ease-out"; // Smooth transition for scaling and resizing
+    copy.style.transition = "flex-basis 1s ease-out, flex-grow 1s ease-out"; 
     copy.style.padding = "3px";
     copy.style.border = "1px solid";
     copy.style.position = "relative";
-  
-    // Allow flex-grow to be adjusted dynamically based on the focus
-    copy.style.flexGrow = "0"; // Initial value, dynamically updated in updateCopyStyles
-    copy.style.flexShrink = "1"; // Allow shrinking if needed
-    copy.style.flexBasis = "auto"; // Let content define the size initially
+    copy.style.flex = "1 0 10%"; // Allow flexibility in width and ensure it has a basis
+    copy.style.boxSizing = "border-box"; // Include padding and border in width/height calculations
   };
-  
-  
 
   const sidebarRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLElement | null>(null); // Reference for the main element
@@ -75,32 +70,27 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
         }
       }
     });
-  
+
     setContainerPairs(newContainerPairs);
   };
 
   const updateCopyStyles = () => {
     const viewportHeight = mainRef.current?.clientHeight || window.innerHeight;
     const centerY = viewportHeight / 2;
-  
+
     containerPairs.forEach((copy, original) => {
       const rect = original.getBoundingClientRect();
       const originalCenterY = rect.top + rect.height / 2;
       const distanceFromCenter = Math.abs(centerY - originalCenterY);
       const maxDistance = viewportHeight / 2;
-  
-      let scale = Math.sin(0.5 * Math.PI * Math.max(0, 1 - distanceFromCenter / maxDistance));
 
-      if (rect.bottom < 0 || rect.top > viewportHeight) {
-        scale = 0;
-      }
+      // Calculate the scale factor (0.1 to 1)
+      let scale = Math.max(0.1, Math.sin(0.5 * Math.PI * Math.max(0, 1 - distanceFromCenter / maxDistance)));
 
-      // Apply scale to width and height
-      copy.style.width = `${scale * 100}%`;
-      copy.style.height = `${scale * 100}%`;
-
-      // Adjust other properties based on scale
-      copy.style.transform = `scale(${scale})`;
+      // Adjust properties based on scale
+      copy.style.flexGrow = `${scale * 10}`; // Max growth factor
+      copy.style.flexShrink = "0"; // Prevent shrinking
+      copy.style.flexBasis = `${scale * 60}%`;
 
       // Adjust z-index based on visibility
       if (scale > 0) {
@@ -116,9 +106,6 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
     });
   };
 
-
-  
-  
   useEffect(updateContainerPairs, [containers]);
 
   useEffect(() => {
@@ -156,7 +143,7 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
   }, [containerPairs]);
 
   return (
-    <div className="flex flex-wrap flex-row" ref={sidebarRef} style={{maxHeight: "1000px", alignItems: "center"}}>
+    <div className="flex flex-row flex-wrap w-full h-full justify-center gap-0" ref={sidebarRef} style={{ maxHeight: "600px", alignItems: "flex-start" }}>
       <MyST ast={containers} />
       <LineConnector containerPairs={containerPairs} />
       {modalImage && (

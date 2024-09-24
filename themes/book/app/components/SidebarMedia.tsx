@@ -74,7 +74,7 @@ const SidebarMedia: React.FC<SidebarMediaProps> = ({ showSidebar, sidebarMedia, 
       <div className="pt-5"></div>
       <div className="pt-5"></div>
       <div className="pt-5"></div>
-      <div className="flex-grow overflow-auto px-4">
+      <div className="flex-grow px-4">
         <div className="sidebarMediaBox cursor-pointer hover:no-underline">
           <SidebarMediaHandler showSidebar={showSidebar} containers={sidebarMedia} />
         </div>
