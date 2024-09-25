@@ -5,6 +5,7 @@ import { MyST } from "myst-to-react";
 import VideoHierarchy from "./VideoHierarchy";
 import { FileChartColumnIncreasing } from "lucide-react";
 import LineConnector from "./LineConnector";
+
 interface SidebarVideoHandlerProps {
   showSidebar: boolean;
   containers: GenericNode[];
@@ -17,23 +18,28 @@ const SidebarVideoHandler: React.FC<SidebarVideoHandlerProps> = ({
   const [containerPairs, setContainerPairs] = useState<Map<HTMLElement, HTMLElement>>(new Map());
   const [originalIdCount, setOriginalIdCount] = useState<number>(0);
   const [copyIdCount, setCopyIdCount] = useState<number>(0);
-  const [videoCopyList, setvideoCopyList] = useState<HTMLElement[]>([]);
+  const [videoCopyList, setVideoCopyList] = useState<HTMLElement[]>([]);
 
   const sidebarRef = useRef<HTMLDivElement>(null);
 
-  // const showTopVideo = () => {
-
-  //   let newTopVideoIndex = null;
-  //   let index = 0;
-  //   containerPairs.forEach((copy, original) => {
-  //     (newTopVideoIndex != null) ?
-  //     if(index <)
-  //     index++;
-  //   });
-  // };
+  const handleResize = () => {
+    containerPairs.forEach((copy, original) => {
+      
+      if (showSidebar) {
+        original.style.height = "1px";
+        original.style.overflow = "hidden";
+        copy.style.visibility = 'visible';
+      } else {
+        original.style.height = "initial";
+        copy.style.visibility = 'hidden';
+      }
+    });
+  };
 
   useEffect(() => {
-    const newContainerPairs = containerPairs;
+    if (containerPairs.size > 0) return; 
+
+    const newContainerPairs = new Map<HTMLElement, HTMLElement>();
     let currentCopyIdCount = copyIdCount;
     let currentOriginalIdCount = originalIdCount;
     let currentVideoCopyList = videoCopyList;
@@ -47,16 +53,13 @@ const SidebarVideoHandler: React.FC<SidebarVideoHandlerProps> = ({
       const topTopTopDiv = iframe.parentElement?.parentElement?.parentElement;
 
       if (sidebarRef.current && sidebarRef.current.contains(iframe)) {
-        
+
         const id = "iframe_node_" + currentCopyIdCount++;
-
         iframe.id = id + "_COPY";
-
         currentVideoCopyList.push(iframe);
 
         const originalElement = document.getElementById(id + "_ORIGINAL");
         if (originalElement) {
-          console.log("Matching original found!!!");
           newContainerPairs.set(originalElement, iframe);
         }
 
@@ -74,49 +77,47 @@ const SidebarVideoHandler: React.FC<SidebarVideoHandlerProps> = ({
         }
 
       } else {
-
+       
         const id = "iframe_node_" + currentOriginalIdCount++;
-
         iframe.id = id + "_ORIGINAL";
 
         const copyElement = document.getElementById(id + "_COPY");
         if (copyElement) {
-          console.log("Matching copy found!!!");
           newContainerPairs.set(iframe, copyElement);
         }
 
         iframe.style.visibility = 'hidden';
-
         iframe.style.height = "1px";
-        
-        console.log(topDiv);
-        console.log(topTopDiv);
-        if (topDiv && topTopDiv) {
-          // topTopDiv.style.height = "1px";
-          // topTopDiv.style.overflow = "hidden";
-          topDiv.style.paddingBottom = "";
 
+        if (topDiv && topTopDiv) {
+          topDiv.style.paddingBottom = "";
         }
       }
-
     });
 
-    console.log("New container pairs: ", newContainerPairs);
     setContainerPairs(newContainerPairs);
     setOriginalIdCount(currentOriginalIdCount);
     setCopyIdCount(currentCopyIdCount);
-    setvideoCopyList(currentVideoCopyList);
-
-  }, [containers, sidebarRef]);
+    setVideoCopyList(currentVideoCopyList);
+  }, []); // Run only once on mount
 
   useEffect(() => {
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [showSidebar, containerPairs]);
+  
+  useEffect(() => {
     containerPairs.forEach((copy, original) => {
-      const topDiv = original.parentElement?.parentElement;
       if (showSidebar) {
         original.style.height = "1px";
         original.style.overflow = "hidden";
+        copy.style.visibility = 'visible';
       } else {
         original.style.height = "initial";
+        copy.style.visibility = 'hidden';
       }
     });
   }, [showSidebar, containerPairs]);
@@ -124,9 +125,8 @@ const SidebarVideoHandler: React.FC<SidebarVideoHandlerProps> = ({
   return (
     <div className="flex flex-column" ref={sidebarRef}>
       <MyST ast={containers} />
-      <VideoHierarchy containerPairs = {containerPairs} />
+      <VideoHierarchy containerPairs={containerPairs} />
       <LineConnector containerPairs={containerPairs} />
-
     </div>
   );
 };
