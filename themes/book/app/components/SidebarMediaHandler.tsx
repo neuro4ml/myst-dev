@@ -36,11 +36,6 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
     copy.style.maxWidth = "max-content";
     copy.style.overflow = "hidden";
 
-    const figcaptions = copy.querySelectorAll('figcaption');
-    figcaptions.forEach((figcaption) => {
-        figcaption.style.maxHeight = "2em";
-        figcaption.style.overflow = "hidden";
-    });
   };
 
   const sidebarRef = useRef<HTMLDivElement>(null);
@@ -92,16 +87,23 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
       // Calculate the scale factor (0.1 to 1)
       let scale = Math.sin(0.5 * Math.PI * Math.max(0, 1 - distanceFromCenter / maxDistance));
 
-      copy.style.transform = `scale(${scale})`
-      copy.style.width = `${scale * 100}%`;
+      
 
 
       // Adjust z-index based on visibility
       if (scale > 0) {
+
+        copy.style.transform = `scale(${scale})`
+        copy.style.width = `${scale * 100}%`;
         copy.style.display = "block";
         copy.style.padding = "3px";
         copy.style.border = "1px solid";
-        copy.style.margin = "3px";
+        copy.style.margin = "1px";
+
+        const figcaptions = copy.querySelectorAll('figcaption');
+        figcaptions.forEach((figcaption) => {
+            figcaption.style.maxHeight = `${scale * 2}em`;  // Maximum 3 lines of text at the current scale
+        });
 
         copy.onclick = () => {
           const img = copy.querySelector("img");
