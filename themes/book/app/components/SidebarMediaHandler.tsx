@@ -102,8 +102,17 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
         copy.style.padding = "3px";
         copy.style.border = "1px solid";
         copy.style.margin = "3px";
+
+        copy.onclick = () => {
+          const img = copy.querySelector("img");
+          if (img) {
+            openModal(img.src, img.alt);
+          }
+        };
       } else {
         copy.style.display = "none";
+
+        copy.onclick = null;
       }
 
     });
@@ -143,7 +152,7 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
         mainRef.current.removeEventListener('resize', updateCopyStyles);
       }
     };
-  }, [containerPairs]);
+  }, [containerPairs, openModal]);
 
   return (
     <div className="flex flex-col items-center" ref={sidebarRef}>
