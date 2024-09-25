@@ -1,14 +1,29 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback, useState } from 'react';
 
 interface LineConnectorProps {
-   containerPairs: Map<HTMLElement, HTMLElement>;
+  containerPairs: Map<HTMLElement, HTMLElement>;
 }
 
 const LineConnector: React.FC<LineConnectorProps> = ({ containerPairs }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animationFrameRef = useRef<number | null>(null);
+  const hoverStartTimes = useRef<Map<HTMLElement, number>>(new Map());
+  const [hoveredElements, setHoveredElements] = useState<Set<HTMLElement>>(new Set());
 
-  const drawLines = useCallback(() => {
+  const updateHoverState = useCallback(() => {
+    const figures = document.querySelectorAll('figure');
+    const newHoveredElements = new Set<HTMLElement>();
+
+    figures.forEach((figure) => {
+      if (figure.matches(':hover')) {
+        newHoveredElements.add(figure as HTMLElement);
+      }
+    });
+
+    setHoveredElements(newHoveredElements);
+  }, []);
+
+  const drawLines = useCallback((timestamp: number) => {
     const canvas = canvasRef.current;
     const context = canvas?.getContext('2d');
     
@@ -17,68 +32,62 @@ const LineConnector: React.FC<LineConnectorProps> = ({ containerPairs }) => {
       return;
     }
 
-    // Set canvas dimensions to match the document, not just the viewport
     canvas.width = document.documentElement.scrollWidth;
     canvas.height = document.documentElement.scrollHeight;
 
-    // Clear canvas before drawing
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     containerPairs.forEach((copy, original) => {
+      if (original && copy && hoveredElements.has(copy)) {
 
-      
-      const figures = document.querySelectorAll('figure');
-      let hovering = false;
-    
-      for (const figure of figures) {
-        if (figure.matches(':hover')) {
-          if (figure === copy) {
-            hovering = true;
-            break;
-          }
+        if (!hoverStartTimes.current.has(copy)) {
+          hoverStartTimes.current.set(copy, timestamp);
         }
-      }
 
-      if (original && copy && hovering) {
         const originalRect = original.getBoundingClientRect();
         const copyRect = copy.getBoundingClientRect();
 
-        // Calculate positions relative to the document, not the viewport
-        
         const startX = originalRect.left + window.pageXOffset + originalRect.width / 5;
         const startY = originalRect.top + window.pageYOffset + originalRect.height / 2;
         const endX = copyRect.left + window.pageXOffset;
         const endY = copyRect.top + window.pageYOffset + copyRect.height / 2;
-        const radius = 0.2*(endY-startY);
-        const midX = (endX + startX)/2;
-        const midY = (endY + startY)/2;
-        const midX1 = (midX + startX)/2;
-        const midY1 = (midY + startY)/2 - radius;
-        const midX2 = (endX + midX)/2;
-        const midY2 = (endY + midY)/2 + radius;
+        const radius = 0.2 * (endY - startY);
+        const midX = (endX + startX) / 2;
+        const midY = (endY + startY) / 2;
+        const midX1 = (midX + startX) / 2;
+        const midY1 = (midY + startY) / 2 - radius;
+        const midX2 = (endX + midX) / 2;
+        const midY2 = (endY + midY) / 2 + radius;
+
+        const maxAlpha = 0.4;
+        const transitionDuration = 150; // 0.15 seconds
+        const hoverStartTime = hoverStartTimes.current.get(copy) || 0;
+        const elapsed = Math.min((timestamp - hoverStartTime) / transitionDuration, 1);
+        const alpha = elapsed * maxAlpha;
 
         context.beginPath();
         context.strokeStyle = 'grey';
         context.lineWidth = 2;
-        context.globalAlpha = 0.4;
+        context.globalAlpha = alpha;
         context.moveTo(startX, startY);
-        context.quadraticCurveTo(midX1, midY1, midX, midY)
-        context.quadraticCurveTo(midX2, midY2, endX, endY)
+        context.quadraticCurveTo(midX1, midY1, midX, midY);
+        context.quadraticCurveTo(midX2, midY2, endX, endY);
         context.stroke();
+      } else {
+
+        hoverStartTimes.current.delete(copy);
       }
     });
-  }, [containerPairs]);
+  }, [containerPairs, hoveredElements]);
 
-  const animateLines = useCallback(() => {
-    drawLines();
+  const animateLines = useCallback((timestamp: number) => {
+    drawLines(timestamp);
     animationFrameRef.current = requestAnimationFrame(animateLines);
   }, [drawLines]);
 
   useEffect(() => {
-    // Start the animation loop
-    animateLines();
+    animationFrameRef.current = requestAnimationFrame(animateLines);
 
-    // Clean up function
     return () => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
@@ -87,19 +96,14 @@ const LineConnector: React.FC<LineConnectorProps> = ({ containerPairs }) => {
   }, [animateLines]);
 
   useEffect(() => {
-    const handleResize = () => {
-      if (canvasRef.current) {
-        canvasRef.current.width = document.documentElement.scrollWidth;
-        canvasRef.current.height = document.documentElement.scrollHeight;
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('mousemove', updateHoverState);
+    window.addEventListener('resize', updateHoverState);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('mousemove', updateHoverState);
+      window.removeEventListener('resize', updateHoverState);
     };
-  }, []);
+  }, [updateHoverState]);
 
   return (
     <canvas
