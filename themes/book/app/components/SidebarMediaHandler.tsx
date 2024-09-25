@@ -30,12 +30,17 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
   }, []);
 
   const styleCopy = (copy: HTMLElement) => {
-    copy.style.transition = "flex-basis 1s ease-out, flex-grow 1s ease-out"; 
-    copy.style.padding = "3px";
-    copy.style.border = "1px solid";
+    copy.style.transition = "transform 0.3s ease-out"; 
     copy.style.position = "relative";
-    copy.style.flex = "1 0 10%"; // Allow flexibility in width and ensure it has a basis
-    copy.style.boxSizing = "border-box"; // Include padding and border in width/height calculations
+    copy.style.height = "fit-content";
+    copy.style.maxWidth = "max-content";
+    copy.style.overflow = "hidden";
+
+    const figcaptions = copy.querySelectorAll('figcaption');
+    figcaptions.forEach((figcaption) => {
+        figcaption.style.maxHeight = "2em";
+        figcaption.style.overflow = "hidden";
+    });
   };
 
   const sidebarRef = useRef<HTMLDivElement>(null);
@@ -85,24 +90,22 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
       const maxDistance = viewportHeight / 2;
 
       // Calculate the scale factor (0.1 to 1)
-      let scale = Math.max(0.1, Math.sin(0.5 * Math.PI * Math.max(0, 1 - distanceFromCenter / maxDistance)));
+      let scale = Math.sin(0.5 * Math.PI * Math.max(0, 1 - distanceFromCenter / maxDistance));
 
-      // Adjust properties based on scale
-      copy.style.flexGrow = `${scale * 10}`; // Max growth factor
-      copy.style.flexShrink = "0"; // Prevent shrinking
-      copy.style.flexBasis = `${scale * 60}%`;
+      copy.style.transform = `scale(${scale})`
+      copy.style.width = `${scale * 100}%`;
+
 
       // Adjust z-index based on visibility
       if (scale > 0) {
-        copy.style.zIndex = "0";
         copy.style.display = "block";
+        copy.style.padding = "3px";
+        copy.style.border = "1px solid";
+        copy.style.margin = "3px";
       } else {
-        copy.style.zIndex = "-10";
         copy.style.display = "none";
       }
 
-      // Optional: add transition for smooth scaling
-      copy.style.transition = 'all 0.3s ease-out';
     });
   };
 
@@ -143,7 +146,7 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
   }, [containerPairs]);
 
   return (
-    <div className="flex flex-row flex-wrap w-full h-full justify-center gap-0" ref={sidebarRef} style={{ maxHeight: "600px", alignItems: "flex-start" }}>
+    <div className="flex flex-col items-center" ref={sidebarRef}>
       <MyST ast={containers} />
       <LineConnector containerPairs={containerPairs} />
       {modalImage && (
