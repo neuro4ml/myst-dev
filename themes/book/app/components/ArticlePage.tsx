@@ -39,6 +39,7 @@ import { visit, SKIP } from 'unist-util-visit';
 import SidebarMedia from './SidebarMedia.js';
 import { MyST } from 'myst-to-react';
 import Split from 'react-split';
+import GutterStyle from './GutterStyle.js';
 
 
 /**
@@ -142,7 +143,7 @@ export const ArticlePage = React.memo(function ({
           className="flex flex-row"
           sizes={showSidebar ? sizes : [100, 0]}
           minSize={[500, 0]}
-          gutterSize={10}
+          gutterSize={12}
           onDrag={(newSizes) => setSizes(newSizes)}
         >
           <main className={"h-full px-4 overflow-auto"}>
@@ -187,6 +188,7 @@ export const ArticlePage = React.memo(function ({
             <SidebarMedia showSidebar={showSidebar} sidebarMedia={sidebarMedia} sidebarVideos={sidebarVideos} />
           </div>
         </Split>
+        <GutterStyle />
       </div>
     </GridSystemProvider>
   );  

@@ -70,20 +70,27 @@ const SidebarMedia: React.FC<SidebarMediaProps> = ({ showSidebar, sidebarMedia, 
   //}, [showSidebar, sidebarMedia, sidebarVideos]); // Re-run when showSidebar or containers change
 
   return (
-    <section className={"h-full flex flex-col border-l px-1"} >
+    <section className="h-full flex flex-col border-l px-1">
+      {/* Optional padding at the top */}
       <div className="pt-5"></div>
       <div className="pt-5"></div>
       <div className="pt-5"></div>
-      <div className="flex-grow px-4">
+  
+      {/* Make this div scrollable while allowing flex-grow for dynamic resizing */}
+      <div className="flex-grow overflow-auto px-4">
+        {/* SidebarMediaHandler */}
         <div className="sidebarMediaBox cursor-pointer hover:no-underline">
           <SidebarMediaHandler showSidebar={showSidebar} containers={sidebarMedia} />
         </div>
       </div>
-      
-      <SidebarVideoHandler showSidebar={showSidebar} containers={sidebarVideos} />
-
+  
+      {/* SidebarVideoHandler */}
+      <div className="flex-shrink-0">
+        <SidebarVideoHandler showSidebar={showSidebar} containers={sidebarVideos} />
+      </div>
     </section>
   );
+  
 };
 
 export default SidebarMedia;
