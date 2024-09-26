@@ -79,9 +79,9 @@ const SidebarMedia: React.FC<SidebarMediaProps> = ({ showSidebar, sidebarMedia, 
           <SidebarMediaHandler showSidebar={showSidebar} containers={sidebarMedia} />
         </div>
       </div>
-      <div className="sidebarVideoBox mt-auto px-4 py-2 flex flex-column">
-        <SidebarVideoHandler showSidebar={showSidebar} containers={sidebarVideos} />
-      </div>
+      
+      <SidebarVideoHandler showSidebar={showSidebar} containers={sidebarVideos} />
+
     </section>
   );
 };

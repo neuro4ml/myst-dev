@@ -12,13 +12,21 @@ const VideoHierarchy: React.FC<VideoHierarchyProps> = ({ containerPairs }) => {
 
   const showCopy = (copy: HTMLElement) => {
     copy.style.visibility = "visible";
-    copy.style.boxSizing = "border-box";
-    copy.style.position = "absolute";
-    copy.style.height = "100%";
+    //copy.style.boxSizing = "border-box";
+    copy.style.width = "100%";
+    copy.style.height = `${copy.offsetWidth * (9 / 16)}px`;  // Maintain 16:9 aspect ratio
   };
 
   const hideCopy = (copy: HTMLElement) => {
     copy.style.visibility = "hidden";
+    copy.style.width = "0";
+  };
+
+  const setStyling = () => {
+    containerPairs.forEach((copy, original) => {
+
+      copy.style.height = `${copy.offsetWidth * (9 / 16)}px`;
+    });
   };
 
   useEffect(() => {
@@ -44,6 +52,7 @@ const VideoHierarchy: React.FC<VideoHierarchyProps> = ({ containerPairs }) => {
               if (index >= 0) {
                 if (isScrolledToBottom) {
                   if (index === videoIndex) {
+                    console.log("SHOWING COPY ", index);
                     showCopy(copy);
                   }
                   else {
@@ -82,6 +91,17 @@ const VideoHierarchy: React.FC<VideoHierarchyProps> = ({ containerPairs }) => {
       observer.disconnect();
     };
   }, [containerPairs, videoIndex]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setStyling();  // Adjust styles on window resize
+    };
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [containerPairs]);
 
   return (
     (videoIndex != null) ? (<VidButtons firstIndex={videoIndex} divElements={videoElements} setVideoIndex={setVideoIndex}/>) : null

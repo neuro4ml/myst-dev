@@ -22,22 +22,30 @@ const SidebarVideoHandler: React.FC<SidebarVideoHandlerProps> = ({
 
   const sidebarRef = useRef<HTMLDivElement>(null);
 
-  const handleResize = () => {
+  // Function to handle video styles and positioning
+  const setStyling = () => {
     containerPairs.forEach((copy, original) => {
-      
+
+      // Explicitly ensure all copies are set to relative and not absolute
+      copy.style.position = "relative";  // Ensure it's relative, not absolute
+      copy.style.width = "100%";
+
       if (showSidebar) {
+        // Hide the original when sidebar is shown
         original.style.height = "1px";
         original.style.overflow = "hidden";
-        copy.style.visibility = 'visible';
+        original.style.visibility = "hidden";
       } else {
-        original.style.height = "initial";
-        copy.style.visibility = 'hidden';
+        // Show original when sidebar is hidden
+        original.style.height = "auto";
+        original.style.visibility = "visible";
       }
     });
   };
 
   useEffect(() => {
-    if (containerPairs.size > 0) return; 
+    // Set video pairs only once on page load
+    if (containerPairs.size > 0) return;
 
     const newContainerPairs = new Map<HTMLElement, HTMLElement>();
     let currentCopyIdCount = copyIdCount;
@@ -47,13 +55,13 @@ const SidebarVideoHandler: React.FC<SidebarVideoHandlerProps> = ({
     const iframes = document.querySelectorAll('iframe');
 
     iframes.forEach((iframe) => {
-
+      
       const topDiv = iframe.parentElement;
       const topTopDiv = iframe.parentElement?.parentElement;
-      const topTopTopDiv = iframe.parentElement?.parentElement?.parentElement;
 
       if (sidebarRef.current && sidebarRef.current.contains(iframe)) {
 
+        // Videos inside the sidebar
         const id = "iframe_node_" + currentCopyIdCount++;
         iframe.id = id + "_COPY";
         currentVideoCopyList.push(iframe);
@@ -63,21 +71,13 @@ const SidebarVideoHandler: React.FC<SidebarVideoHandlerProps> = ({
           newContainerPairs.set(originalElement, iframe);
         }
 
+        // Make sure the video containers are styled properly
         if (topDiv && topTopDiv) {
           topDiv.replaceWith(iframe);
-          topTopDiv.style.position = "relative";
-          topTopDiv.style.overflow = "hidden";
-          topTopDiv.style.width = "100%";
-          topTopDiv.style.maxWidth = "100%";
-          topTopDiv.style.justifyContent = "right";
+          topDiv.style.overflow = "hidden";
         }
-
-        if (topTopTopDiv) {
-          topTopTopDiv.style.minHeight = "25%";
-        }
-
       } else {
-       
+        // Videos outside the sidebar (originals)
         const id = "iframe_node_" + currentOriginalIdCount++;
         iframe.id = id + "_ORIGINAL";
 
@@ -86,6 +86,7 @@ const SidebarVideoHandler: React.FC<SidebarVideoHandlerProps> = ({
           newContainerPairs.set(iframe, copyElement);
         }
 
+        // Ensure the original video is hidden when not in the sidebar
         iframe.style.visibility = 'hidden';
         iframe.style.height = "1px";
 
@@ -99,31 +100,15 @@ const SidebarVideoHandler: React.FC<SidebarVideoHandlerProps> = ({
     setOriginalIdCount(currentOriginalIdCount);
     setCopyIdCount(currentCopyIdCount);
     setVideoCopyList(currentVideoCopyList);
-  }, []); // Run only once on mount
+  }, []); // Run only once on page load
 
+  // Apply the styling on sidebar show/hide
   useEffect(() => {
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [showSidebar, containerPairs]);
-  
-  useEffect(() => {
-    containerPairs.forEach((copy, original) => {
-      if (showSidebar) {
-        original.style.height = "1px";
-        original.style.overflow = "hidden";
-        copy.style.visibility = 'visible';
-      } else {
-        original.style.height = "initial";
-        copy.style.visibility = 'hidden';
-      }
-    });
+    setStyling();
   }, [showSidebar, containerPairs]);
 
   return (
-    <div className="flex flex-column" ref={sidebarRef}>
+    <div className="sidebarVideoBox mt-auto px-4 py-2 flex flex-column overflow-hidden" ref={sidebarRef}>
       <MyST ast={containers} />
       <VideoHierarchy containerPairs={containerPairs} />
       <LineConnector containerPairs={containerPairs} />
