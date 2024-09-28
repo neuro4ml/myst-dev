@@ -108,11 +108,11 @@ export const ArticlePage = React.memo(function ({
 
   const [showSidebar, setShowSidebar] = useState(true);
 
-  const [sizes, setSizes] = useState(showSidebar ? [70, 30] : [100, 0]);
+  const [sizes, setSizes] = useState(showSidebar ? [50, 50] : [100, 0]);
 
   const toggleSidebar = () => {
     setShowSidebar((prev) => !prev);
-    setSizes(showSidebar ? [100, 0] : [70, 30]);
+    setSizes(showSidebar ? [100, 0] : [50, 50]);
   };
 
   const sidebarMediaTypes = 'container,proof,math';
