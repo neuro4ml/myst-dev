@@ -44,8 +44,18 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
   const updateContainerPairs = () => {
     const newContainerPairs = containerPairs;
     containers.forEach((container) => {
-      const id = container.identifier;
+      let id = container.identifier;
+      console.log("ID: ", id);
       if (id) {
+
+        // * Handles edge-case for id starting with a number
+        const firstChar = id.charAt(0);
+        if(firstChar >= '0' && firstChar <= '9'){
+          const oldId = id;
+          id = "id-" + oldId;
+        }
+        // *
+
         const element = document.getElementById(id);
         if (element) {
           if (sidebarRef.current && sidebarRef.current.contains(element)) {
