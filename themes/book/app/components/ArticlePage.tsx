@@ -40,6 +40,7 @@ import SidebarMedia from './SidebarMedia.js';
 import { MyST } from 'myst-to-react';
 import Split from 'react-split';
 import GutterStyle from './GutterStyle.js';
+import ControlBar from './ControlBar.js';
 
 
 /**
@@ -85,10 +86,14 @@ export const ArticlePage = React.memo(function ({
   article,
   hide_all_footer_links,
   hideKeywords,
+  hideTOC,
+  setHideTOC,
 }: {
   article: PageLoader;
   hide_all_footer_links?: boolean;
   hideKeywords?: boolean;
+  hideTOC?: boolean;
+  setHideTOC?: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const manifest = useProjectManifest();
   const compute = useComputeOptions();
@@ -109,11 +114,6 @@ export const ArticlePage = React.memo(function ({
   const [showSidebar, setShowSidebar] = useState(true);
 
   const [sizes, setSizes] = useState(showSidebar ? [50, 50] : [100, 0]);
-
-  const toggleSidebar = () => {
-    setShowSidebar((prev) => !prev);
-    setSizes(showSidebar ? [100, 0] : [50, 50]);
-  };
 
   const sidebarMediaTypes = 'container,proof,math';
   const sidebarVideoTypes = 'iframe';
@@ -139,11 +139,17 @@ export const ArticlePage = React.memo(function ({
   return (
     <GridSystemProvider gridSystem={gridChoice}>
       <div className="flex flex-row h-screen">
+        <ControlBar 
+          hideTOC={hideTOC} 
+          setHideTOC={setHideTOC}
+          showSidebar={showSidebar} 
+          setShowSidebar={setShowSidebar} 
+        />
         <Split
           className="flex flex-row"
           sizes={showSidebar ? sizes : [100, 0]}
           minSize={[500, 0]}
-          gutterSize={12}
+          gutterSize={showSidebar ? 10 : 0}
           onDrag={(newSizes) => setSizes(newSizes)}
         >
           <main className={"h-full px-4 overflow-auto"}>

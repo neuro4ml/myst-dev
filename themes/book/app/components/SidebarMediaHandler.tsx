@@ -102,7 +102,7 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
 
         const figcaptions = copy.querySelectorAll('figcaption');
         figcaptions.forEach((figcaption) => {
-            figcaption.style.maxHeight = `${scale * 2}em`;  // Maximum 3 lines of text at the current scale
+            figcaption.style.maxHeight = `${scale * 2}em`;  // Maximum 2 lines of text at the current scale
         });
 
         copy.onclick = () => {
@@ -137,7 +137,6 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
     mainRef.current = document.querySelector('main'); // Select the main element
 
     const handleScroll = () => {
-      console.log("Scroll event triggered on main");
       updateCopyStyles();
     };
 

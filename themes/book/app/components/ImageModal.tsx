@@ -54,7 +54,7 @@ const ModalContent = styled.div`
 
 const ModalImage = styled.img`
   max-width: 100%;
-  max-height: 90vh;
+  max-height: 85vh;
   object-fit: contain;
 `;
 

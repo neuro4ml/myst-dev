@@ -6,34 +6,46 @@ interface VideoHierarchyProps {
 }
 
 const VideoHierarchy: React.FC<VideoHierarchyProps> = ({ containerPairs }) => {
-
+  
   const [videoIndex, setVideoIndex] = useState<number | null>(null);
   const [videoElements, setVideoElements] = useState<HTMLElement[]>([]);
 
+  const playVideo = (element: HTMLIFrameElement) => {
+    console.log("Playing ", element);
+    if(element.contentWindow) {
+      element.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+    }
+  };
+  const pauseVideo = (element: HTMLIFrameElement) => {
+    console.log("Pausing ", element);
+    if(element.contentWindow) {
+      element.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+    }
+  };
+
   const showCopy = (copy: HTMLElement) => {
-    // Make the element visible and reset styles
     copy.style.visibility = "visible";
-    copy.style.display = "block";
+    //copy.style.boxSizing = "border-box";
     copy.style.width = "100%";
-
-    // Set height to auto first, to allow proper recalculation
-    copy.style.height = "auto";
-
-    // Use a small timeout to ensure layout recalculation happens before setting the height
-    setTimeout(() => {
-      // After layout recalculates, apply the correct aspect ratio
-      copy.style.height = `min(30vh, ${copy.offsetWidth * (9 / 16)}px)`;
-    }, 0);
+    copy.style.height = `${copy.offsetWidth * (9 / 16)}px`;  // Maintain 16:9 aspect ratio
+    playVideo(copy as HTMLIFrameElement);
   };
 
   const hideCopy = (copy: HTMLElement) => {
+    pauseVideo(copy as HTMLIFrameElement);
     copy.style.visibility = "hidden";
     copy.style.width = "0";
-    copy.style.height = "0";
-    copy.style.display = "none";  // Hide completely
+  };
+
+  const setStyling = () => {
+    containerPairs.forEach((copy, original) => {
+
+      copy.style.height = `${copy.offsetWidth * (9 / 16)}px`;
+    });
   };
 
   useEffect(() => {
+
     const videoCopies: HTMLElement[] = Array.from(containerPairs.values());
     const videoElements: HTMLElement[] = Array.from(containerPairs.keys());
     setVideoElements(videoElements);
@@ -45,7 +57,6 @@ const VideoHierarchy: React.FC<VideoHierarchyProps> = ({ containerPairs }) => {
         entries.forEach((entry) => {
           const scrollableParent = document.querySelector('main') as HTMLElement;
           const original = entry.target as HTMLElement;
-
           if (containerPairs.has(original)) {
             const copy = containerPairs.get(original);
 
@@ -53,26 +64,27 @@ const VideoHierarchy: React.FC<VideoHierarchyProps> = ({ containerPairs }) => {
               const index = videoCopies.indexOf(copy);
               const isScrolledToBottom = scrollableParent.scrollTop + scrollableParent.clientHeight >= scrollableParent.scrollHeight;
 
-              hideCopy(copy); // Hide initially
-
               if (index >= 0) {
                 if (isScrolledToBottom) {
                   if (index === videoIndex) {
                     console.log("SHOWING COPY ", index);
-                    showCopy(copy);  // Show only if scrolled to bottom
-                  } else {
+                    showCopy(copy);
+                  }
+                  else {
                     hideCopy(copy);
                   }
-                } else if (entry.isIntersecting) {
-                  if (currentVideoIndex == null || index <= currentVideoIndex) {
-                    showCopy(copy);  // Show when intersecting and valid index
+                }
+                else if (entry.isIntersecting) {
+                  if ((currentVideoIndex != null) ? (index <= currentVideoIndex) : true) {
+                    showCopy(copy);
                     currentVideoIndex = index;
-                  } else {
+                  } 
+                  else {
                     hideCopy(copy);
                   }
-                } else {
-                  hideCopy(copy);  // Hide when not intersecting
-                  if (index === currentVideoIndex) {
+                }  else {
+                  hideCopy(copy);
+                  if(index == currentVideoIndex) {
                     currentVideoIndex = null;
                   }
                 }
@@ -89,15 +101,25 @@ const VideoHierarchy: React.FC<VideoHierarchyProps> = ({ containerPairs }) => {
       observer.observe(original);
     });
 
+    // Cleanup on unmount
     return () => {
       observer.disconnect();
     };
   }, [containerPairs, videoIndex]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setStyling();  // Adjust styles on window resize
+    };
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [containerPairs]);
+
   return (
-    (videoIndex != null) ? (
-      <VidButtons firstIndex={videoIndex} divElements={videoElements} setVideoIndex={setVideoIndex}/>
-    ) : null
+    (videoIndex != null) ? (<VidButtons firstIndex={videoIndex} divElements={videoElements} setVideoIndex={setVideoIndex}/>) : null
   );
 };
 

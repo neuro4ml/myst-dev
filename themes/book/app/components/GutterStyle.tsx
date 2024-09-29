@@ -14,8 +14,8 @@ const GutterStyle: React.FC<{}> = () => {
       gutterContents.style.height = "100%";
       gutterContents.style.width = "100%";
       gutterContents.style.alignItems = "center";
-      gutterContents.style.backgroundColor = "blue";
-      gutterContents.innerHTML = ReactDOMServer.renderToStaticMarkup(<EllipsisVertical size={"100%"} color="gray" />);
+      gutterContents.style.backgroundColor = "rgb(59 130 246)";
+      gutterContents.innerHTML = ReactDOMServer.renderToStaticMarkup(<EllipsisVertical size={"100%"} />);
       gutter.appendChild(gutterContents);
     });
   }, []);

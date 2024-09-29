@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   json,
   type V2_MetaFunction,
@@ -113,15 +114,21 @@ export default function Page() {
     ...siteDesign,
     ...pageDesign,
   };
-
+  const [hideTOC, setHideTOC] = useState(true);
+  
   return (
-    <ArticlePageAndNavigation hide_toc={true} projectSlug={data.page.project}>
+    <ArticlePageAndNavigation hide_toc={hideTOC} projectSlug={data.page.project}>
       <ProjectProvider>
         <ComputeOptionsProvider
           features={{ notebookCompute: true, figureCompute: true, launchBinder: false }}
         >
           <ThebeLoaderAndServer baseurl={baseurl}>
-            <ArticlePage article={data.page} hide_all_footer_links={hide_footer_links} />
+            <ArticlePage 
+              article={data.page} 
+              hide_all_footer_links={hide_footer_links}
+              showTOC={hideTOC}
+              setShowTOC={setHideTOC} 
+            />
           </ThebeLoaderAndServer>
         </ComputeOptionsProvider>
       </ProjectProvider>
