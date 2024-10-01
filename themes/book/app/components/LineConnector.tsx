@@ -2,9 +2,10 @@ import React, { useEffect, useRef, useCallback, useState } from 'react';
 
 interface LineConnectorProps {
   containerPairs: Map<HTMLElement, HTMLElement>;
+  showLines: boolean;
 }
 
-const LineConnector: React.FC<LineConnectorProps> = ({ containerPairs }) => {
+const LineConnector: React.FC<LineConnectorProps> = ({ containerPairs, showLines }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const hoverStartTimes = useRef<Map<HTMLElement, number>>(new Map());
@@ -38,7 +39,7 @@ const LineConnector: React.FC<LineConnectorProps> = ({ containerPairs }) => {
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     containerPairs.forEach((copy, original) => {
-      if (original && copy && hoveredElements.has(copy)) {
+      if (original && copy && (hoveredElements.has(copy) || showLines)) {
 
         if (!hoverStartTimes.current.has(copy)) {
           hoverStartTimes.current.set(copy, timestamp);

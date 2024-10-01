@@ -6,46 +6,58 @@ interface VideoHierarchyProps {
 }
 
 const VideoHierarchy: React.FC<VideoHierarchyProps> = ({ containerPairs }) => {
-  
+
   const [videoIndex, setVideoIndex] = useState<number | null>(null);
   const [videoElements, setVideoElements] = useState<HTMLElement[]>([]);
 
   const playVideo = (element: HTMLIFrameElement) => {
     console.log("Playing ", element);
-    if(element.contentWindow) {
+    if (element.contentWindow) {
       element.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
     }
   };
+  
   const pauseVideo = (element: HTMLIFrameElement) => {
     console.log("Pausing ", element);
-    if(element.contentWindow) {
+    if (element.contentWindow) {
       element.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
     }
   };
 
   const showCopy = (copy: HTMLElement) => {
-    copy.style.visibility = "visible";
-    //copy.style.boxSizing = "border-box";
+    copy.style.display = "block";
     copy.style.width = "100%";
     copy.style.height = `${copy.offsetWidth * (9 / 16)}px`;  // Maintain 16:9 aspect ratio
-    playVideo(copy as HTMLIFrameElement);
+    if(copy.offsetWidth >= 10) {
+      playVideo(copy as HTMLIFrameElement);
+    }
+    else {
+      pauseVideo(copy as HTMLIFrameElement);
+    }
+    
   };
 
   const hideCopy = (copy: HTMLElement) => {
     pauseVideo(copy as HTMLIFrameElement);
-    copy.style.visibility = "hidden";
+    copy.style.display = "none";
     copy.style.width = "0";
+    copy.style.height = "0";
   };
 
   const setStyling = () => {
     containerPairs.forEach((copy, original) => {
-
       copy.style.height = `${copy.offsetWidth * (9 / 16)}px`;
+      console.log("Setting height of ", copy, " to ", copy.offsetWidth * (9 / 16));
+      if(copy.offsetWidth >= 10) {
+        playVideo(copy as HTMLIFrameElement);
+      }
+      else {
+        pauseVideo(copy as HTMLIFrameElement);
+      }
     });
   };
 
   useEffect(() => {
-
     const videoCopies: HTMLElement[] = Array.from(containerPairs.values());
     const videoElements: HTMLElement[] = Array.from(containerPairs.keys());
     setVideoElements(videoElements);
@@ -69,22 +81,19 @@ const VideoHierarchy: React.FC<VideoHierarchyProps> = ({ containerPairs }) => {
                   if (index === videoIndex) {
                     console.log("SHOWING COPY ", index);
                     showCopy(copy);
-                  }
-                  else {
+                  } else {
                     hideCopy(copy);
                   }
-                }
-                else if (entry.isIntersecting) {
+                } else if (entry.isIntersecting) {
                   if ((currentVideoIndex != null) ? (index <= currentVideoIndex) : true) {
                     showCopy(copy);
                     currentVideoIndex = index;
-                  } 
-                  else {
+                  } else {
                     hideCopy(copy);
                   }
-                }  else {
+                } else {
                   hideCopy(copy);
-                  if(index == currentVideoIndex) {
+                  if (index == currentVideoIndex) {
                     currentVideoIndex = null;
                   }
                 }
@@ -107,19 +116,25 @@ const VideoHierarchy: React.FC<VideoHierarchyProps> = ({ containerPairs }) => {
     };
   }, [containerPairs, videoIndex]);
 
+  // Use ResizeObserver to handle size changes in the split pane
   useEffect(() => {
-    const handleResize = () => {
-      setStyling();  // Adjust styles on window resize
-    };
-    window.addEventListener("resize", handleResize);
+    const resizeObserver = new ResizeObserver(() => {
+      setStyling();  // Adjust styles on element resize
+    });
+
+    containerPairs.forEach((copy) => {
+      resizeObserver.observe(copy);  // Observe size changes for each container element
+    });
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      resizeObserver.disconnect();  // Clean up observer on unmount
     };
   }, [containerPairs]);
 
   return (
-    (videoIndex != null) ? (<VidButtons firstIndex={videoIndex} divElements={videoElements} setVideoIndex={setVideoIndex}/>) : null
+    (videoIndex != null) ? (
+      <VidButtons firstIndex={videoIndex} divElements={videoElements} setVideoIndex={setVideoIndex} />
+    ) : null
   );
 };
 

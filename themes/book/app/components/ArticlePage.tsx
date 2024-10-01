@@ -112,6 +112,7 @@ export const ArticlePage = React.memo(function ({
   const parts = extractKnownParts(tree);
 
   const [showSidebar, setShowSidebar] = useState(true);
+  const [showLines, setShowLines] = useState(false);
 
   const [sizes, setSizes] = useState(showSidebar ? [50, 50] : [100, 0]);
 
@@ -138,12 +139,14 @@ export const ArticlePage = React.memo(function ({
   const gridChoice = 'none';
   return (
     <GridSystemProvider gridSystem={gridChoice}>
-      <div className="flex flex-row h-screen">
+      <div id="controlBar" className="flex flex-row h-screen">
         <ControlBar 
           hideTOC={hideTOC} 
           setHideTOC={setHideTOC}
           showSidebar={showSidebar} 
           setShowSidebar={setShowSidebar} 
+          showLines={showLines}
+          setShowLines={setShowLines}
         />
         <Split
           className="flex flex-row"
@@ -175,9 +178,6 @@ export const ArticlePage = React.memo(function ({
                   )}
                   <div id="skip-to-article" />
                   <FrontmatterParts parts={parts} keywords={keywords} hideKeywords={hideKeywords} />
-                  <button onClick={() => setShowSidebar(!showSidebar)}>
-                    Toggle Sidebar
-                  </button>
                   <ContentBlocks pageKind={article.kind} mdast={tree as GenericParent} />
                   <BackmatterParts parts={parts} />
                   <Footnotes />
@@ -191,7 +191,7 @@ export const ArticlePage = React.memo(function ({
             </ReferencesProvider>
           </main>
           <div style={{ display: showSidebar ? 'block' : 'none', width: showSidebar ? 'auto' : '0' }}>
-            <SidebarMedia showSidebar={showSidebar} sidebarMedia={sidebarMedia} sidebarVideos={sidebarVideos} />
+            <SidebarMedia showSidebar={showSidebar} sidebarMedia={sidebarMedia} sidebarVideos={sidebarVideos} showLines={showLines} />
           </div>
         </Split>
         <GutterStyle />

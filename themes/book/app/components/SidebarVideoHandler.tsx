@@ -9,11 +9,13 @@ import LineConnector from "./LineConnector";
 interface SidebarVideoHandlerProps {
   showSidebar: boolean;
   containers: GenericNode[];
+  showLines: boolean;
 }
 
 const SidebarVideoHandler: React.FC<SidebarVideoHandlerProps> = ({
   containers,
   showSidebar,
+  showLines,
 }) => {
   const [containerPairs, setContainerPairs] = useState<Map<HTMLElement, HTMLElement>>(new Map());
   const [originalIdCount, setOriginalIdCount] = useState<number>(0);
@@ -28,21 +30,25 @@ const SidebarVideoHandler: React.FC<SidebarVideoHandlerProps> = ({
 
       // Explicitly ensure all copies are set to relative and not absolute
       copy.style.position = "relative";  // Ensure it's relative, not absolute
+      copy.style.maxWidth = "400px";
       copy.style.width = "100%";
       copy.style.padding = "3px";
       copy.style.border = "1px solid";
 
       original.style.position = "relative";
+      original.style.maxWidth = "80%";
       
       if (showSidebar) {
         // Hide the original when sidebar is shown
         original.style.height = "1px";
         original.style.overflow = "hidden";
         original.style.visibility = "hidden";
+        original.style.margin = "0";
       } else {
         // Show original when sidebar is hidden
         original.style.height = `${original.offsetWidth * (9 / 16)}px`;
         original.style.visibility = "visible";
+        original.style.margin = "1rem auto";
       }
     });
   };
@@ -112,10 +118,10 @@ const SidebarVideoHandler: React.FC<SidebarVideoHandlerProps> = ({
   }, [showSidebar, containerPairs]);
 
   return (
-    <div className="sidebarVideoBox mt-auto px-4 py-2 flex flex-column overflow-hidden items-center" ref={sidebarRef}>
+    <div id="sidebarVideoBox" className=" w-fit mt-auto px-4 py-2 flex flex-column overflow-hidden items-center" style={{paddingRight: "4rem"}}ref={sidebarRef}>
       <MyST ast={containers} />
       <VideoHierarchy containerPairs={containerPairs} />
-      <LineConnector containerPairs={containerPairs} />
+      <LineConnector containerPairs={containerPairs} showLines={showLines} />
     </div>
   );
 };

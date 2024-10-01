@@ -3,10 +3,12 @@ import { GenericNode } from "myst-common";
 import { MyST } from "myst-to-react";
 import LineConnector from "./LineConnector";
 import ImageModal from "./ImageModal";
+import VideoHierarchy from "./VideoHierarchy";
 
 interface SidebarMediaHandlerProps {
   showSidebar: boolean;
   containers: GenericNode[];
+  showLines: boolean;
 }
 
 interface ModalImage {
@@ -17,6 +19,7 @@ interface ModalImage {
 const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
   containers,
   showSidebar,
+  showLines
 }) => {
   const [containerPairs, setContainerPairs] = useState<Map<HTMLElement, HTMLElement>>(new Map());
   const [modalImage, setModalImage] = useState<ModalImage | null>(null);
@@ -45,7 +48,6 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
     const newContainerPairs = containerPairs;
     containers.forEach((container) => {
       let id = container.identifier;
-      console.log("ID: ", id);
       if (id) {
 
         // * Handles edge-case for id starting with a number
@@ -137,8 +139,16 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
       if (showSidebar) {
         original.style.height = "0";
         original.style.overflow = "hidden";
+        original.style.padding = "0";
+        original.style.border = "0";
+        original.style.margin = "0";
       } else {
         original.style.height = "initial";
+        original.style.maxWidth = "80%";
+        original.style.padding = "3px";
+        original.style.border = "1px solid";
+        original.style.margin = "1rem auto";
+        
       }
     });
   }, [showSidebar, containerPairs]);
@@ -168,7 +178,7 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
   return (
     <div className="flex flex-col items-center" ref={sidebarRef}>
       <MyST ast={containers} />
-      <LineConnector containerPairs={containerPairs} />
+      <LineConnector containerPairs={containerPairs} showLines={showLines}/>
       {modalImage && (
         <ImageModal
           src={modalImage.src}
