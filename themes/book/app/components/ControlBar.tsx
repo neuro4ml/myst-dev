@@ -64,7 +64,7 @@ const ControlBar: React.FC<ControlBarProps> = ({ hideTOC, setHideTOC, showSideba
           <button onClick={handleShowSidebar} className={buttonStyle}>
             Toggle Splitscreen
           </button>
-          <button className={buttonStyle}>Show Lines</button>
+          <button onClick={handleShowLines} className={buttonStyle}>Show Lines</button>
           <button onClick={handleHideTOC} className={buttonStyle}>
             Show ToC
           </button>

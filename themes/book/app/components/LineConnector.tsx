@@ -39,7 +39,7 @@ const LineConnector: React.FC<LineConnectorProps> = ({ containerPairs, showLines
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     containerPairs.forEach((copy, original) => {
-      if (original && copy && (hoveredElements.has(copy) || showLines)) {
+      if (original && copy && (hoveredElements.has(copy) || (showLines && copy.offsetWidth > 0))) {
 
         if (!hoverStartTimes.current.has(copy)) {
           hoverStartTimes.current.set(copy, timestamp);
