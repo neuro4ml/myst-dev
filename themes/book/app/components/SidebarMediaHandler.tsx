@@ -94,10 +94,12 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
       const rect = original.getBoundingClientRect();
       const originalCenterY = rect.top + rect.height / 2;
       const distanceFromCenter = Math.abs(centerY - originalCenterY);
-      const maxDistance = viewportHeight / 2;
+      const oldMaxDistance = viewportHeight / 2;
+      const maxDistance = oldMaxDistance + 200; // modify to set maximum distance of media off-screen in px
 
       // Calculate the scale factor (0.1 to 1)
       let scale = Math.sin(0.5 * Math.PI * Math.max(0, 1 - distanceFromCenter / maxDistance));
+      
 
       
 
