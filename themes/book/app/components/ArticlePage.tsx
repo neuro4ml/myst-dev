@@ -86,12 +86,18 @@ export const ArticlePage = React.memo(function ({
   article,
   hide_all_footer_links,
   hideKeywords,
+  tocRef,
+  projectSlug,
+  footer,
   hideTOC,
   setHideTOC,
 }: {
   article: PageLoader;
   hide_all_footer_links?: boolean;
   hideKeywords?: boolean;
+  tocRef?: React.RefObject<HTMLDivElement>;
+  projectSlug?: string;
+  footer?: React.ReactNode;
   hideTOC?: boolean;
   setHideTOC?: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
@@ -142,6 +148,9 @@ export const ArticlePage = React.memo(function ({
       <div id="controlBar" className="flex flex-row h-screen">
         <ControlBar 
           hideTOC={hideTOC} 
+          tocRef={tocRef}
+          projectSlug={projectSlug}
+          footer={footer}
           setHideTOC={setHideTOC}
           showSidebar={showSidebar} 
           setShowSidebar={setShowSidebar} 

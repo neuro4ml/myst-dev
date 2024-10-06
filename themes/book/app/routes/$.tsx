@@ -115,6 +115,11 @@ export default function Page() {
     ...pageDesign,
   };
   const [hideTOC, setHideTOC] = useState(true);
+
+  const inset = 20; // begin text 20px from the top (aligned with menu)
+
+  const top = useThemeTop();
+  const { container, toc } = useTocHeight(top, inset);
   
   return (
     <ArticlePageAndNavigation hide_toc={hideTOC} projectSlug={data.page.project}>
@@ -126,8 +131,11 @@ export default function Page() {
             <ArticlePage 
               article={data.page} 
               hide_all_footer_links={hide_footer_links}
-              showTOC={hideTOC}
-              setShowTOC={setHideTOC} 
+              tocRef={toc}
+              projectSlug={data.page.project}
+              footer={<MadeWithMyst />} 
+              hideTOC={hideTOC}
+              setHideTOC={setHideTOC} 
             />
           </ThebeLoaderAndServer>
         </ComputeOptionsProvider>

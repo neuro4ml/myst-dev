@@ -11,14 +11,14 @@ const VideoHierarchy: React.FC<VideoHierarchyProps> = ({ containerPairs }) => {
   const [videoElements, setVideoElements] = useState<HTMLElement[]>([]);
 
   const playVideo = (element: HTMLIFrameElement) => {
-    console.log("Playing ", element);
+    //console.log("Playing ", element);
     if (element.contentWindow) {
       element.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
     }
   };
   
   const pauseVideo = (element: HTMLIFrameElement) => {
-    console.log("Pausing ", element);
+    //console.log("Pausing ", element);
     if (element.contentWindow) {
       element.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
     }
@@ -47,7 +47,7 @@ const VideoHierarchy: React.FC<VideoHierarchyProps> = ({ containerPairs }) => {
   const setStyling = () => {
     containerPairs.forEach((copy, original) => {
       copy.style.height = `${copy.offsetWidth * (9 / 16)}px`;
-      console.log("Setting height of ", copy, " to ", copy.offsetWidth * (9 / 16));
+      //console.log("Setting height of ", copy, " to ", copy.offsetWidth * (9 / 16));
       if(copy.offsetWidth >= 10) {
         playVideo(copy as HTMLIFrameElement);
       }
