@@ -106,7 +106,7 @@ const ControlBar: React.FC<ControlBarProps> = ({ hideTOC, tocRef, projectSlug, f
             Show ToC
           </button> */}
         </div>
-        <div className={"overflow-auto"} ref={tocElemRef}>
+        <div className={"overflow-y-auto overflow-x-hidden"} ref={tocElemRef}>
           <TableOfContents tocRef={tocRef} projectSlug={projectSlug} footer={footer}/>
         </div>
         
