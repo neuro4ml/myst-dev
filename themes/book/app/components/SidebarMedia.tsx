@@ -1,8 +1,8 @@
 import { GenericNode } from "myst-common";
 import { MyST } from "myst-to-react";
 import React, { useEffect, useRef, useState } from "react";
-// import SidebarMediaHandler from "./SidebarMediaHandler";
-// import SidebarVideoHandler from "./SidebarVideoHandler";
+import SidebarMediaHandler from "./SidebarMediaHandler";
+import SidebarVideoHandler from "./SidebarVideoHandler";
 
 interface SidebarMediaProps {
   showSidebar: boolean;
@@ -21,14 +21,12 @@ const SidebarMedia: React.FC<SidebarMediaProps> = ({ showSidebar, sidebarMedia, 
 
       <div className="flex-grow overflow-auto px-4">
         <div className="sidebarMediaBox cursor-pointer hover:no-underline">
-          <MyST ast={sidebarMedia} />
-          {/* <SidebarMediaHandler showSidebar={showSidebar} containers={sidebarMedia} showLines={showLines} /> */}
+          <SidebarMediaHandler showSidebar={showSidebar} containers={sidebarMedia} showLines={showLines} />
         </div>
       </div>
 
       <div className="flex-shrink-0" style={{margin: "0 0 auto 0"}}>
-        <MyST ast={sidebarVideos} />
-        {/* <SidebarVideoHandler showSidebar={showSidebar} containers={sidebarVideos} showLines={showLines}/> */}
+        <SidebarVideoHandler showSidebar={showSidebar} containers={sidebarVideos} showLines={showLines}/>
       </div>
     </section>
   );
