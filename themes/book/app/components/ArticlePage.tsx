@@ -133,14 +133,24 @@ export const ArticlePage = React.memo(function ({
         node.identifier = "alloc_node_" + IDCount++;
       } 
       sidebarMedia.push(node);
+      node.identifier += "_ORIGINAL";
       return SKIP;
     }
     else if (matches(sidebarVideoTypes, node)) {
       node.src = AddPlaybackAttributes({node});
       sidebarVideos.push(node);
+      node.identifier += "_ORIGINAL";
       return SKIP;
     }
   });
+  sidebarMedia.forEach(function(mediaNode) {
+    mediaNode.identifier += "_COPY";
+  });
+  sidebarVideos.forEach(function(videoNode) {
+    videoNode.identifier += "_COPY";
+  });
+
+  
 
   const gridChoice = 'none';
   return (

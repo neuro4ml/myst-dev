@@ -50,39 +50,60 @@ const SidebarMediaHandler: React.FC<SidebarMediaHandlerProps> = ({
       let id = container.identifier;
       if (id) {
 
-        // * Handles edge-case for id starting with a number
-        const firstChar = id.charAt(0);
-        if(firstChar >= '0' && firstChar <= '9'){
-          const oldId = id;
-          id = "id-" + oldId;
-        }
-        // *
+    //     // * Handles edge-case for id starting with a number
+    //     const firstChar = id.charAt(0);
+    //     if(firstChar >= '0' && firstChar <= '9'){
+    //       const oldId = id;
+    //       id = "id-" + oldId;
+    //     }
+    //     // *
+
+    //     const element = document.getElementById(id);
+    //     if (element) {
+    //       if (sidebarRef.current && sidebarRef.current.contains(element)) {
+    //         element.id += "_COPY";
+    //         styleCopy(element);
+    //         const originalElement = document.getElementById(id + "_ORIGINAL");
+    //         if (originalElement) {
+    //           newContainerPairs.set(originalElement, element);
+    //         }
+    //       } else {
+    //         element.id += "_ORIGINAL";
+    //         const element2 = document.getElementById(id);
+    //         if (element2 && sidebarRef.current && sidebarRef.current.contains(element2)) {
+    //           element2.id += "_COPY";
+    //           styleCopy(element2);
+    //           const originalElement = document.getElementById(id + "_ORIGINAL");
+    //           if (originalElement) {
+    //             newContainerPairs.set(originalElement, element2);
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    // });
 
         const element = document.getElementById(id);
-        if (element) {
+        if(element){
           if (sidebarRef.current && sidebarRef.current.contains(element)) {
-            element.id += "_COPY";
             styleCopy(element);
-            const originalElement = document.getElementById(id + "_ORIGINAL");
-            if (originalElement) {
+            const originalId = id.replace("_COPY", "_ORIGINAL");
+            const originalElement = document.getElementById(originalId);
+            if(originalElement){
               newContainerPairs.set(originalElement, element);
             }
-          } else {
-            element.id += "_ORIGINAL";
-            const element2 = document.getElementById(id);
-            if (element2 && sidebarRef.current && sidebarRef.current.contains(element2)) {
-              element2.id += "_COPY";
-              styleCopy(element2);
-              const originalElement = document.getElementById(id + "_ORIGINAL");
-              if (originalElement) {
-                newContainerPairs.set(originalElement, element2);
-              }
+          }
+          else{
+            const copyId = id.replace("_ORIGINAL", "_COPY");
+            const copyElement = document.getElementById(copyId);
+            if(copyElement){
+              styleCopy(copyElement);
+              newContainerPairs.set(element, copyElement);
             }
           }
         }
       }
     });
-
     setContainerPairs(newContainerPairs);
   };
 
