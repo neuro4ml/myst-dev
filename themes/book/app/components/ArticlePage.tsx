@@ -213,7 +213,7 @@ export const ArticlePage = React.memo(function ({
             <SidebarMedia showSidebar={showSidebar} sidebarMedia={sidebarMedia} sidebarVideos={sidebarVideos} showLines={showLines} />
           </div>
         </Split>
-        <GutterStyle />
+        {/* <GutterStyle /> */}
       </div>
     </GridSystemProvider>
   );  
