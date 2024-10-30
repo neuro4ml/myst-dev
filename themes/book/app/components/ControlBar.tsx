@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { ArrowRightFromLine } from 'lucide-react';
-import { TableOfContents } from '@myst-theme/site/src/components/Navigation/TableOfContents.js';
+import { TableOfContents } from '@myst-theme/site';
 
 interface ControlBarProps {
   hideTOC?: boolean;

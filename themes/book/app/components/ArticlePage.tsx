@@ -132,22 +132,20 @@ export const ArticlePage = React.memo(function ({
       if(!node.identifier) {
         node.identifier = "alloc_node_" + IDCount++;
       } 
-      sidebarMedia.push({...node});
+      const copyNode = {...node};
+      copyNode.identifier += "_COPY";
+      sidebarMedia.push(copyNode);
       node.identifier += "_ORIGINAL";
       return SKIP;
     }
     else if (matches(sidebarVideoTypes, node)) {
       node.src = AddPlaybackAttributes({node});
-      sidebarVideos.push({...node});
+      const copyNode = {...node};
+      copyNode.identifier += "_COPY";
+      sidebarVideos.push(copyNode);
       node.identifier += "_ORIGINAL";
       return SKIP;
     }
-  });
-  sidebarMedia.forEach(function(mediaNode) {
-    mediaNode.identifier += "_COPY";
-  });
-  sidebarVideos.forEach(function(videoNode) {
-    videoNode.identifier += "_COPY";
   });
 
   
